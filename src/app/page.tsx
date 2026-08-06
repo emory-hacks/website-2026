@@ -4,6 +4,7 @@
 // import Link from "next/link";
 import Countdown, { zeroPad } from "react-countdown";
 // import title-logo from "../images/title-logo.png";
+import { IconBrandInstagram, IconBrandLinkedin } from "@tabler/icons-react";
 
 const DDAY = "2026-11-13";
 
@@ -43,6 +44,32 @@ export default function Home() {
         {/* <Button asChild size="lg" className="w-full mt-5">
           <Link href="/register">Register</Link>
         </Button> */}
+      </div>
+
+      <div className="fixed bottom-8 w-full flex flex-col items-center">
+        <p className="text-sm text-muted-foreground mb-3 font-medium">
+          Follow us on our socials!
+        </p>
+        <div className="flex justify-center items-center gap-5">
+          <a
+            href="https://www.instagram.com/emoryhacks_"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Instagram"
+          >
+            <IconBrandInstagram className="size-6" />
+          </a>
+          <a
+            href="https://www.linkedin.com/company/project-emory/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="LinkedIn"
+          >
+            <IconBrandLinkedin className="size-6" />
+          </a>
+        </div>
       </div>
     </main>
   );
