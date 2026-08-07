@@ -3,8 +3,9 @@
 // import { Button } from "@/components/ui/button";
 // import Link from "next/link";
 import Countdown, { zeroPad } from "react-countdown";
-// import title-logo from "../images/title-logo.png";
 import { IconBrandInstagram, IconBrandLinkedin } from "@tabler/icons-react";
+import Image from "next/image";
+import logo from "../images/logo_transparent.png";
 
 const DDAY = "2026-11-13";
 
@@ -14,9 +15,17 @@ export default function Home() {
       <div className="-z-10 rounded-full animate-pulse absolute top-1/2 left-1/2 -translate-x-1/3 -translate-y-1/3 size-[30vw] bg-sky-200/30 blur-3xl" />
       <div className="-z-10 rounded-full animate-pulse absolute bottom-1/2 right-1/2 translate-x-1/3 translate-y-1/3 size-[30vw] bg-lime-200/30 blur-3xl" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-lg border p-6 rounded-2xl backdrop-blur-2xl">
-        <div className="flex">
+        <div className="flex items-center gap-4">
+          <div className="shrink-0">
+            <Image
+              src={logo}
+              alt="Emory Hacks Logo"
+              width={170}
+              className="object-contain"
+            />
+          </div>
           <div className="grow">
-            <h1 className="mb-4">
+            <h1 className="mb-4 whitespace-nowrap">
               Emory Hacks
               <br />
               2026 Fall
