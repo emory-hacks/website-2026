@@ -6,10 +6,17 @@ import Countdown, { zeroPad } from "react-countdown";
 import { IconBrandInstagram, IconBrandLinkedin } from "@tabler/icons-react";
 import Image from "next/image";
 import logo from "../images/logo_transparent.png";
+import { useState, useEffect } from "react";
 
 const DDAY = "2026-11-13";
 
 export default function Home() {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   return (
     <main className="">
       <div className="-z-10 rounded-full animate-pulse absolute top-1/2 left-1/2 -translate-x-1/3 -translate-y-1/3 size-[30vw] bg-sky-200/30 blur-3xl" />
@@ -33,21 +40,30 @@ export default function Home() {
             <h3 className="text-muted-foreground">11/13 - 11/15</h3>
           </div>
           <div className="w-20 flex flex-col justify-between text-muted-foreground/40 text-3xl font-black text-right">
-            <Countdown
-              date={new Date(DDAY)}
-              intervalDelay={0}
-              precision={3}
-              renderer={({ days, hours, minutes, seconds }) => {
-                return (
-                  <>
-                    <p className="font-mono">{days}</p>
-                    <p className="font-mono">{zeroPad(hours, 2)}</p>
-                    <p className="font-mono">{zeroPad(minutes, 2)}</p>
-                    <p className="font-mono">{zeroPad(seconds, 2)}</p>
-                  </>
-                );
-              }}
-            />
+            {isMounted ? (
+              <Countdown
+                date={new Date(DDAY)}
+                intervalDelay={0}
+                precision={3}
+                renderer={({ days, hours, minutes, seconds }) => {
+                  return (
+                    <>
+                      <p className="font-mono">{days}</p>
+                      <p className="font-mono">{zeroPad(hours, 2)}</p>
+                      <p className="font-mono">{zeroPad(minutes, 2)}</p>
+                      <p className="font-mono">{zeroPad(seconds, 2)}</p>
+                    </>
+                  );
+                }}
+              />
+            ) : (
+              <>
+                <p className="font-mono">--</p>
+                <p className="font-mono">--</p>
+                <p className="font-mono">--</p>
+                <p className="font-mono">--</p>
+              </>
+            )}
           </div>
         </div>
         {/* <Button asChild size="lg" className="w-full mt-5">
