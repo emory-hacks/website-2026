@@ -52,10 +52,10 @@ export default function Home() {
                   renderer={({ days, hours, minutes, seconds }) => {
                     return (
                       <>
-                        <p className="font-mono">{days}</p>
-                        <p className="font-mono">{zeroPad(hours, 2)}</p>
-                        <p className="font-mono">{zeroPad(minutes, 2)}</p>
-                        <p className="font-mono">{zeroPad(seconds, 2)}</p>
+                        <p className="font-mono">{days}D</p>
+                        <p className="font-mono">{zeroPad(hours, 2)}H</p>
+                        <p className="font-mono">{zeroPad(minutes, 2)}M</p>
+                        <p className="font-mono">{zeroPad(seconds, 2)}S</p>
                       </>
                     );
                   }}
