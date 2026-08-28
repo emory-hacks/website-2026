@@ -7,6 +7,7 @@ import { IconBrandInstagram, IconBrandLinkedin } from "@tabler/icons-react";
 import Image from "next/image";
 import logo from "../images/logo_transparent.png";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 const DDAY = "2026-11-13";
 
@@ -87,7 +88,7 @@ export default function Home() {
       </div>
 
       {/* SOCIALS SECTION */}
-      <div className="fixed bottom-8 w-full flex flex-col items-center">
+      <div className="fixed bottom-20 sm:bottom-20 lg:bottom-30 w-full flex flex-col items-center">
         <p className="text-sm text-muted-foreground mb-3 font-medium">
           Follow us on our socials!
         </p>
@@ -111,6 +112,15 @@ export default function Home() {
             <IconBrandLinkedin className="size-6" />
           </a>
         </div>
+      </div>
+      <div className="absolute bottom-0 left-0 z-50 w-full hidden sm:flex sm:h-20 lg:h-20 items-center justify-center">
+        <Link
+          href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md"
+          target="_blank"
+          className="cursor-pointer underline"
+        >
+          MLH Code of Conduct
+        </Link>
       </div>
     </main>
   );

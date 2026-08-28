@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown, ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
-// import { motion } from "motion/react";
-// import Image from "next/image";
+import { motion } from "motion/react";
+import Image from "next/image";
 
 const pastSites = [
   {
@@ -26,7 +26,7 @@ const pastSites = [
 const Nav = () => {
   return (
     <nav className="absolute flex h-14 items-center justify-end top-0 w-screen z-100 m-0 *:m-0 px-5">
-      {/* <MLHBadge /> */}
+      <MLHBadge />
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger className="text-sm flex items-center gap-2 font-mono px-2 py-1 rounded focus:outline-0 bg-primary/20">
           <span>2026 Fall</span>
@@ -50,3 +50,27 @@ const Nav = () => {
 };
 
 export default Nav;
+
+const MLHBadge = () => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, top: -20 }}
+      animate={{ opacity: 1, top: 0 }}
+      transition={{ delay: 1 }}
+      className="absolute left-0 size-30 md:size-40"
+    >
+      <Link
+        id="mlh-trust-badge"
+        href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=white"
+        target="_blank"
+      >
+        <Image
+          src="https://logged-assets.s3.amazonaws.com/trust-badge/2027/mlh-trust-badge-2027-white.svg"
+          alt="Major League Hacking 2026 Hackathon Season"
+          width={100}
+          height={100}
+        />
+      </Link>
+    </motion.div>
+  );
+};
