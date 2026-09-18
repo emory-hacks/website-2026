@@ -25,26 +25,57 @@ const pastSites = [
 
 const Nav = () => {
   return (
-    <nav className="absolute flex h-14 items-center justify-end top-0 w-screen z-100 m-0 *:m-0 px-5">
+    <nav className="absolute flex h-20 items-center justify-end top-0 w-full z-[100] px-8 py-6">
       <MLHBadge />
-      <DropdownMenu modal={false}>
-        <DropdownMenuTrigger className="text-sm flex items-center gap-2 font-mono px-2 py-1 rounded focus:outline-0 bg-primary/20">
-          <span>2026 Fall</span>
-          <ChevronDown size={16} />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          {pastSites.map(({ year, link }, i) => (
-            <DropdownMenuItem key={i} className="cursor-pointer" asChild>
-              <Link href={link} target="_blank">
-                {year}
-                <DropdownMenuShortcut>
-                  <ExternalLinkIcon />
-                </DropdownMenuShortcut>
-              </Link>
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+
+      <div className="flex items-center gap-6 font-medium text-gray-800">
+        <Link href="#about" className="hover:text-gray-500 transition-colors">
+          About
+        </Link>
+        <Link href="#tracks" className="hover:text-gray-500 transition-colors">
+          Tracks
+        </Link>
+        <Link
+          href="#schedule"
+          className="hover:text-gray-500 transition-colors"
+        >
+          Schedule
+        </Link>
+        <Link
+          href="#sponsors"
+          className="hover:text-gray-500 transition-colors"
+        >
+          Sponsors
+        </Link>
+
+        {/* Previous Years Dropdown */}
+        <DropdownMenu modal={false}>
+          <DropdownMenuTrigger className="flex items-center gap-1 hover:text-gray-500 transition-colors focus:outline-none cursor-pointer">
+            <span>Previous Years</span>
+            <ChevronDown size={16} />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            {pastSites.map(({ year, link }, i) => (
+              <DropdownMenuItem key={i} className="cursor-pointer" asChild>
+                <Link href={link} target="_blank">
+                  {year}
+                  <DropdownMenuShortcut>
+                    <ExternalLinkIcon size={14} />
+                  </DropdownMenuShortcut>
+                </Link>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Apply Button */}
+        <Link
+          href="https://luma.com/erlwfmoi"
+          className="bg-[#f26c4f] text-white px-5 py-2 rounded-md hover:bg-[#d95b40] transition-colors shadow-sm"
+        >
+          Apply
+        </Link>
+      </div>
     </nav>
   );
 };
@@ -57,18 +88,20 @@ const MLHBadge = () => {
       initial={{ opacity: 0, top: -20 }}
       animate={{ opacity: 1, top: 0 }}
       transition={{ delay: 1 }}
-      className="absolute left-0 size-30 md:size-40"
+      className="absolute left-8 top-0 size-30 md:size-40"
     >
       <Link
         id="mlh-trust-badge"
         href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=white"
         target="_blank"
+        className="block w-full max-w-[100px]"
       >
         <Image
           src="https://logged-assets.s3.amazonaws.com/trust-badge/2027/mlh-trust-badge-2027-white.svg"
           alt="Major League Hacking 2026 Hackathon Season"
           width={100}
           height={100}
+          className="w-full h-auto"
         />
       </Link>
     </motion.div>
