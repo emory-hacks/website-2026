@@ -22,7 +22,6 @@ const AboutSection = () => {
           ABOUT
         </h2>
 
-        {/* Partially Transparent Text Box */}
         <div className="bg-white/80 backdrop-blur-md rounded-[40px] p-8 md:p-12 shadow-xl border border-white/40">
           <p className="text-center text-lg md:text-xl leading-[2] text-gray-900 font-medium">
             Emory Hacks, presented by PROJECT Emory, is a hackathon hosted at

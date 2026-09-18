@@ -25,16 +25,15 @@ const LandingSection = () => {
       {/* Right Green Graphic Placeholder */}
       <div className="absolute right-[0%] bottom-[0%] w-[40vw] md:w-[35vw] h-[80vh] bg-[#9cc044]"></div>
 
-      {/* Center Content Wrapper - Forces a column layout */}
+      {/* Center Content Wrapper*/}
       <div className="relative z-10 flex w-full flex-col items-center justify-center -mt-20">
-        {/* Inner Wrapper - Controls the width of the logo and the elements below it */}
+        {/* Inner Wrapper */}
         <div className="relative flex flex-col items-center justify-center w-[90%] sm:w-[80%] md:w-[70%] lg:w-[60%]">
           {/* Logo Container */}
           <div className="relative flex w-full items-center justify-center">
             {/* The white glow backdrop */}
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] h-[80%] bg-white blur-3xl rounded-[100%] opacity-90 z-0"></div>
 
-            {/* The actual logo */}
             <Image
               src={logo}
               alt="Emory Hacks Logo"
@@ -45,9 +44,8 @@ const LandingSection = () => {
             />
           </div>
 
-          {/* Date & Timer Flex Row - Aligns them horizontally across from each other */}
+          {/* Date & Timer Flex Row */}
           <div className="relative z-10 flex w-full justify-between items-center mt-2 px-4 md:px-8">
-            {/* Date Text with 5% left padding and Mochiy Pop One font */}
             <p
               className="text-xl md:text-2xl text-gray-900 pl-[5%]"
               style={{ fontFamily: "'Mochiy Pop One', sans-serif" }}

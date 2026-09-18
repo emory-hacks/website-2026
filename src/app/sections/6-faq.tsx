@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-// Mock data matching the wireframe placeholders
 const faqData = [
   {
     question: "Vorem ipsum dolor sit amet, consectetur adipiscing elit?",
@@ -70,7 +69,6 @@ const FaqSection = () => {
           Q&A
         </h2>
 
-        {/* Fixed Height Container */}
         <div className="w-full bg-white/80 backdrop-blur-md rounded-[40px] px-8 py-10 md:px-12 md:py-14 shadow-xl border border-white/40 h-[600px] md:h-[650px] overflow-y-auto custom-scrollbar">
           <div className="flex flex-col w-full">
             {faqData.map((faq, index) => (
@@ -95,7 +93,7 @@ const FaqSection = () => {
                   />
                 </button>
 
-                {/* Animated Answer Dropdown */}
+                {/* Answer Dropdown */}
                 <div
                   className={`grid transition-all duration-300 ease-in-out ${
                     openIndex === index

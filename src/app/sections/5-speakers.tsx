@@ -41,21 +41,16 @@ const SpeakerSection = () => {
     const total = speakerData.length;
     const offset = (index - currentIndex + total) % total;
 
-    // FRONT: Active Card
+    // Cards
     if (offset === 0) {
       return "left-1/2 -translate-x-1/2 scale-100 z-30 opacity-100 shadow-xl bg-[#9cc044]";
     }
-    // MIDDLE RIGHT: 1 position ahead
     if (offset === 1) {
-      // Pushed out to 72% to accommodate the wider cards
       return "left-[70%] md:left-[72%] -translate-x-1/2 scale-90 z-20 opacity-60 shadow-md bg-[#b5d365]";
     }
-    // MIDDLE LEFT: 1 position behind
     if (offset === total - 1) {
-      // Pushed out to 28% to accommodate the wider cards
       return "left-[30%] md:left-[28%] -translate-x-1/2 scale-90 z-20 opacity-60 shadow-md bg-[#b5d365]";
     }
-    // BACK: 2 positions away
     return "left-1/2 -translate-x-1/2 scale-75 -translate-y-8 z-10 opacity-30 bg-[#cce393]";
   };
 
