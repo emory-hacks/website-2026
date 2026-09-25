@@ -83,7 +83,13 @@ const FaqSection = () => {
                   onClick={() => toggleFaq(index)}
                   className="flex justify-between items-center w-full text-left focus:outline-none group"
                 >
-                  <h3 className="text-sm md:text-base font-bold text-gray-900 group-hover:text-gray-600 transition-colors">
+                  <h3
+                    className="text-sm md:text-base font-bold text-gray-900 group-hover:text-gray-600 transition-colors"
+                    style={{
+                      fontFamily: "'Mochiy Pop One', sans-serif",
+                      fontWeight: "400",
+                    }}
+                  >
                     {faq.question}
                   </h3>
                   <ChevronDown

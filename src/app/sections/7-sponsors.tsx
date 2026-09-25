@@ -9,7 +9,12 @@ const SponsorsSection = () => {
       className="relative w-full bg-[#f4f9fc] px-6 py-24 sm:py-32"
     >
       <div className="mx-auto flex max-w-3xl flex-col items-center">
-        <h2 className="text-5xl font-extrabold tracking-tight text-neutral-900 sm:text-6xl">
+        <h2
+          className="text-5xl font-extrabold tracking-tight text-neutral-900 sm:text-6xl"
+          style={{
+            fontFamily: "'Mochiy Pop One', sans-serif",
+          }}
+        >
           Sponsors
         </h2>
 

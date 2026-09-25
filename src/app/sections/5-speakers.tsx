@@ -74,7 +74,13 @@ const SpeakerSection = () => {
               index,
             )}`}
           >
-            <h3 className="text-3xl font-black text-black mb-4">
+            <h3
+              className="text-3xl font-black text-black mb-4"
+              style={{
+                fontFamily: "'Mochiy Pop One', sans-serif",
+                fontWeight: "400",
+              }}
+            >
               {speaker.name}
             </h3>
             <p className="text-black font-medium leading-relaxed">

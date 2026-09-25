@@ -78,8 +78,13 @@ const ScheduleSection = () => {
       className="relative w-full bg-[#f4f9fc] px-6 py-24 sm:py-32"
     >
       <div className="mx-auto flex max-w-3xl flex-col items-center">
-        <h2 className="text-5xl font-extrabold tracking-tight text-neutral-900 sm:text-6xl">
-          Schedule
+        <h2
+          className="text-5xl font-extrabold tracking-tight text-neutral-900 sm:text-6xl"
+          style={{
+            fontFamily: "'Mochiy Pop One', sans-serif",
+          }}
+        >
+          SCHEDULE
         </h2>
 
         {/* Schedule card with navigation arrows */}
@@ -94,7 +99,13 @@ const ScheduleSection = () => {
           </button>
 
           <div className="w-full max-w-md rounded-3xl bg-white p-8 shadow-sm">
-            <p className="text-lg font-bold text-neutral-900">
+            <p
+              className="text-lg font-bold text-neutral-900"
+              style={{
+                fontFamily: "'Mochiy Pop One', sans-serif",
+                fontWeight: "400",
+              }}
+            >
               {activeDay.date} ({activeDay.day})
             </p>
 
