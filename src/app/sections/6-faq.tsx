@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { ChevronDown } from "lucide-react";
+import flower3 from "@/images/about_flower3.png"; // bud (left)
+import flower2 from "@/images/about_flower2.png"; // single flower (right)
 
 const faqData = [
   {
@@ -51,51 +54,112 @@ const FaqSection = () => {
   return (
     <section
       id="qna"
-      className="relative min-h-screen w-full bg-[#f4f9fc] flex flex-col items-center justify-center overflow-hidden py-20"
+      className="relative flex min-h-[100svh] w-full items-center justify-center bg-[#f4f9fc] overflow-hidden"
     >
-      {/* Left Green Graphic Placeholder */}
-      <div className="absolute left-[5%] md:left-[15%] top-[45%] w-[30vw] md:w-[15vw] h-[40vh] bg-[#9cc044]"></div>
+      <div
+        className="relative shrink-0"
+        style={{
+          width: "min(100%, calc(100svh * 1440 / 1200))",
+          aspectRatio: "1440 / 1200",
+          containerType: "inline-size",
+        }}
+      >
+        {/* Flower 3 */}
+        <div
+          className="pointer-events-none absolute z-0"
+          style={{
+            left: "15.81%",
+            top: "43.39%",
+            width: "16.18%",
+            aspectRatio: "233 / 540",
+            transform: "rotate(-17.69deg) scaleX(-1)",
+          }}
+        >
+          <Image
+            src={flower3}
+            alt=""
+            fill
+            sizes="20vw"
+            className="object-contain"
+          />
+        </div>
 
-      {/* Right Green Graphic Placeholder */}
-      <div className="absolute right-[5%] md:right-[15%] top-[45%] w-[30vw] md:w-[15vw] h-[40vh] bg-[#9cc044]"></div>
+        {/* Flower 2 */}
+        <div
+          className="pointer-events-none absolute z-0"
+          style={{
+            left: "75.4%",
+            top: "66.32%",
+            width: "7.71%",
+            aspectRatio: "111 / 301",
+            transform: "rotate(22.65deg)",
+          }}
+        >
+          <Image
+            src={flower2}
+            alt=""
+            fill
+            sizes="10vw"
+            className="object-contain"
+          />
+        </div>
 
-      {/* Center Content Wrapper */}
-      <div className="relative z-10 flex flex-col items-center w-[90%] sm:w-[80%] md:w-[65%] lg:w-[50%]">
         {/* Title */}
         <h2
-          className="text-5xl md:text-7xl text-black mb-8 z-20"
-          style={{ fontFamily: "'Mochiy Pop One', sans-serif" }}
+          className="absolute z-20 -translate-x-1/2 whitespace-nowrap leading-none text-black"
+          style={{
+            left: "50%",
+            top: "16.75%",
+            fontSize: "5.35cqw",
+            fontFamily: "'Mochiy Pop One', sans-serif",
+          }}
         >
           Q&A
         </h2>
 
-        <div className="w-full bg-white/80 backdrop-blur-md rounded-[40px] px-8 py-10 md:px-12 md:py-14 shadow-xl border border-white/40 h-[600px] md:h-[650px] overflow-y-auto custom-scrollbar">
+        {/* Card */}
+        <div
+          className="absolute z-10 bg-white/80 backdrop-blur-md shadow-xl border border-white/40 overflow-y-auto custom-scrollbar"
+          style={{
+            left: "23.89%",
+            top: "27.5%",
+            width: "52.22%",
+            height: "61%",
+            borderRadius: "2.78cqw",
+            padding: "5.2cqw 4.4cqw",
+          }}
+        >
           <div className="flex flex-col w-full">
             {faqData.map((faq, index) => (
               <div
                 key={index}
-                className={`flex flex-col border-b-2 border-black/10 py-4 ${
+                className={`flex flex-col border-b-2 border-black/10 ${
                   index === faqData.length - 1 ? "border-b-0" : ""
                 }`}
+                style={{ padding: "1.84cqw 0" }}
               >
                 {/* Question Trigger */}
                 <button
                   onClick={() => toggleFaq(index)}
                   className="flex justify-between items-center w-full text-left focus:outline-none group"
+                  style={{ gap: "1cqw" }}
                 >
                   <h3
-                    className="text-sm md:text-base font-bold text-gray-900 group-hover:text-gray-600 transition-colors"
+                    className="text-gray-900 group-hover:text-gray-600 transition-colors"
                     style={{
+                      fontSize: "1.32cqw",
+                      lineHeight: 1.3,
                       fontFamily: "'Mochiy Pop One', sans-serif",
-                      fontWeight: "400",
+                      fontWeight: 400,
                     }}
                   >
                     {faq.question}
                   </h3>
                   <ChevronDown
-                    className={`size-5 text-gray-500 transition-transform duration-300 ${
+                    className={`shrink-0 text-gray-500 transition-transform duration-300 ${
                       openIndex === index ? "rotate-180" : "rotate-0"
                     }`}
+                    style={{ width: "1.5cqw", height: "1.5cqw" }}
                   />
                 </button>
 
@@ -103,12 +167,20 @@ const FaqSection = () => {
                 <div
                   className={`grid transition-all duration-300 ease-in-out ${
                     openIndex === index
-                      ? "grid-rows-[1fr] opacity-100 mt-3"
-                      : "grid-rows-[0fr] opacity-0 mt-0"
+                      ? "grid-rows-[1fr] opacity-100"
+                      : "grid-rows-[0fr] opacity-0"
                   }`}
+                  style={{ marginTop: openIndex === index ? "0.8cqw" : 0 }}
                 >
                   <div className="overflow-hidden">
-                    <p className="text-xs md:text-sm text-gray-700 leading-relaxed font-medium pr-8">
+                    <p
+                      className="text-gray-700 font-medium"
+                      style={{
+                        fontSize: "1.1cqw",
+                        lineHeight: 1.5,
+                        paddingRight: "2cqw",
+                      }}
+                    >
                       {faq.answer}
                     </p>
                   </div>
