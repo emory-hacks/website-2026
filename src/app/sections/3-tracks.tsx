@@ -3,18 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import leafAnt from "@/images/tracks_leaf1.png"; // leaf with the ant
-import leafLadybug from "@/images/tracks_leaf2.png"; // leaf with the ladybug
-
-/*
-  Layout is based on the Figma frame: 1440 x 1081 (same scaling approach as landing/about).
-  The stage is scaled to fit the viewport; everything inside is positioned in % of the frame
-  and text uses cqw (1cqw = 1% of the stage width).
-
-  Each slide = one leaf image + one white card. The active slide sits in the middle,
-  neighbours are shifted left/right, scaled down and faded. Leaves alternate between
-  the ladybug and the ant; the ladybug leaf shows first.
-*/
+import leafAnt from "@/images/tracks_leaf1.png";
+import leafLadybug from "@/images/tracks_leaf2.png";
 
 const trackData = [
   {
@@ -39,9 +29,8 @@ const trackData = [
   },
 ];
 
-// Figma: leaf box 1036 wide at left 176 (12.22%); the leaf image is ~1036x925 and starts at top 112.5 (10.4%)
-const SIDE_SHIFT = "46.3%"; // how far side slides move (of slide width)
-const SIDE_LIFT = "-3.8%"; // side slides sit slightly higher than the centre one
+const SIDE_SHIFT = "46.3%"; // how far side slides move
+const SIDE_LIFT = "-3.8%"; // side slides sit slightly higher than the center one
 
 const TracksSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -132,7 +121,7 @@ const TracksSection = () => {
               priority={index < 2}
             />
 
-            {/* White card (slightly smaller than the wireframe: ~430px wide instead of ~475px) */}
+            {/* White card */}
             <div
               className="absolute flex flex-col bg-white/80 backdrop-blur-sm shadow-lg border border-white/50"
               style={{
@@ -165,7 +154,7 @@ const TracksSection = () => {
           </div>
         ))}
 
-        {/* Arrows - Figma: centred at ~(718, 879) */}
+        {/* Arrows */}
         <div
           className="absolute z-40 flex -translate-x-1/2 -translate-y-1/2"
           style={{ left: "50%", top: "81.3%", gap: "1.9cqw" }}
