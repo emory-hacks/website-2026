@@ -1,6 +1,50 @@
 "use client";
 
-const SPONSOR_SLOTS = [1, 2];
+import Image, { type StaticImageData } from "next/image";
+import { ImageIcon } from "lucide-react";
+
+interface Sponsor {
+  name: string;
+  logo?: StaticImageData;
+  url?: string;
+}
+
+const SPONSORS: Sponsor[] = [
+  { name: "Sponsor 1" /* , logo: acmeLogo, url: "https://acme.com" */ },
+  { name: "Sponsor 2" /* , logo: globexLogo, url: "https://globex.com" */ },
+];
+
+const SponsorCard = ({ sponsor }: { sponsor: Sponsor }) => {
+  const content = sponsor.logo ? (
+    <Image
+      src={sponsor.logo}
+      alt={sponsor.name}
+      className="max-h-full max-w-full object-contain"
+    />
+  ) : (
+    <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-xl text-neutral-400">
+      <ImageIcon className="size-7" strokeWidth={1.5} />
+      <span className="text-sm font-medium">{sponsor.name}</span>
+    </div>
+  );
+
+  const className =
+    "flex h-32 w-56 items-center justify-center rounded-2xl bg-white p-4 shadow-sm";
+
+  return sponsor.url ? (
+    <a
+      href={sponsor.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`${className} transition-shadow hover:shadow-md`}
+      aria-label={sponsor.name}
+    >
+      {content}
+    </a>
+  ) : (
+    <div className={className}>{content}</div>
+  );
+};
 
 const SponsorsSection = () => {
   return (
@@ -19,11 +63,8 @@ const SponsorsSection = () => {
         </h2>
 
         <div className="mt-14 flex flex-wrap items-center justify-center gap-6">
-          {SPONSOR_SLOTS.map((slot) => (
-            <div
-              key={slot}
-              className="h-32 w-56 rounded-2xl bg-white shadow-sm"
-            />
+          {SPONSORS.map((sponsor) => (
+            <SponsorCard key={sponsor.name} sponsor={sponsor} />
           ))}
         </div>
       </div>
