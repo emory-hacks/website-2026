@@ -1,7 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import leafAnt from "@/images/tracks_leaf1.png"; // leaf with the ant
+import leafLadybug from "@/images/tracks_leaf2.png"; // leaf with the ladybug
+
+/*
+  Layout is based on the Figma frame: 1440 x 1081 (same scaling approach as landing/about).
+  The stage is scaled to fit the viewport; everything inside is positioned in % of the frame
+  and text uses cqw (1cqw = 1% of the stage width).
+
+  Each slide = one leaf image + one white card. The active slide sits in the middle,
+  neighbours are shifted left/right, scaled down and faded. Leaves alternate between
+  the ladybug and the ant; the ant leaf shows first.
+*/
 
 const speakerData = [
   {
@@ -26,85 +39,160 @@ const speakerData = [
   },
 ];
 
+// Figma: leaf box 1036 wide at left 176 (12.22%); the leaf image is ~1036x925 and starts at top 112.5 (10.4%)
+const SIDE_SHIFT = "46.3%"; // how far side slides move (of slide width)
+const SIDE_LIFT = "-3.8%"; // side slides sit slightly higher than the centre one
+
 const SpeakerSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const nextSpeaker = () => {
+  const next = () => {
     setCurrentIndex((prev) => (prev === speakerData.length - 1 ? 0 : prev + 1));
   };
 
-  const prevSpeaker = () => {
+  const prev = () => {
     setCurrentIndex((prev) => (prev === 0 ? speakerData.length - 1 : prev - 1));
   };
 
-  const getCardStyle = (index: number) => {
+  const getSlideStyle = (index: number): React.CSSProperties => {
     const total = speakerData.length;
     const offset = (index - currentIndex + total) % total;
 
-    // Cards
     if (offset === 0) {
-      return "left-1/2 -translate-x-1/2 scale-100 z-30 opacity-100 shadow-xl bg-[#9cc044]";
+      return {
+        transform: "translate(0, 0) scale(1)",
+        opacity: 1,
+        zIndex: 30,
+      };
     }
     if (offset === 1) {
-      return "left-[70%] md:left-[72%] -translate-x-1/2 scale-90 z-20 opacity-60 shadow-md bg-[#b5d365]";
+      return {
+        transform: `translate(${SIDE_SHIFT}, ${SIDE_LIFT}) scale(0.9)`,
+        opacity: 0.5,
+        zIndex: 20,
+      };
     }
     if (offset === total - 1) {
-      return "left-[30%] md:left-[28%] -translate-x-1/2 scale-90 z-20 opacity-60 shadow-md bg-[#b5d365]";
+      return {
+        transform: `translate(-${SIDE_SHIFT}, ${SIDE_LIFT}) scale(0.9)`,
+        opacity: 0.5,
+        zIndex: 20,
+      };
     }
-    return "left-1/2 -translate-x-1/2 scale-75 -translate-y-8 z-10 opacity-30 bg-[#cce393]";
+    return {
+      transform: `translate(0, ${SIDE_LIFT}) scale(0.75)`,
+      opacity: 0,
+      zIndex: 10,
+      pointerEvents: "none",
+    };
   };
 
   return (
     <section
       id="speakers"
-      className="relative min-h-screen w-full bg-[#f4f9fc] flex flex-col items-center justify-center overflow-hidden py-20"
+      className="relative flex min-h-[100svh] w-full items-center justify-center bg-[#f4f9fc] overflow-hidden"
     >
-      <h2
-        className="text-5xl md:text-7xl text-black mb-16 z-20"
-        style={{ fontFamily: "'Mochiy Pop One', sans-serif" }}
+      <div
+        className="relative shrink-0"
+        style={{
+          width: "min(100%, calc(100svh * 1440 / 1081))",
+          aspectRatio: "1440 / 1081",
+          containerType: "inline-size",
+        }}
       >
-        SPEAKERS
-      </h2>
+        {/* Title */}
+        <h2
+          className="absolute z-20 -translate-x-1/2 whitespace-nowrap leading-none text-black"
+          style={{
+            left: "50%",
+            top: "20.1%",
+            fontSize: "5.35cqw",
+            fontFamily: "'Mochiy Pop One', sans-serif",
+          }}
+        >
+          SPEAKERS
+        </h2>
 
-      <div className="relative w-full max-w-5xl h-[400px] flex items-center justify-center mb-8">
-        {speakerData.map((speaker, index) => (
+        {/* Slides */}
+        {speakerData.map((item, index) => (
           <div
-            key={speaker.id}
-            className={`absolute transition-all duration-500 ease-in-out w-[400px] md:w-[590px] h-[350px] p-8 flex flex-col justify-center rounded-sm ${getCardStyle(
-              index,
-            )}`}
+            key={item.id}
+            className="absolute transition-all duration-500 ease-in-out"
+            style={{
+              left: "12.22%",
+              top: "10.4%",
+              width: "71.94%",
+              ...getSlideStyle(index),
+            }}
           >
-            <h3
-              className="text-3xl font-black text-black mb-4"
+            <Image
+              src={index % 2 === 1 ? leafLadybug : leafAnt}
+              alt=""
+              className="w-full h-auto pointer-events-none"
+              priority={index < 2}
+            />
+
+            {/* White card (slightly smaller than the wireframe: ~430px wide instead of ~475px) */}
+            <div
+              className="absolute flex flex-col bg-white/80 backdrop-blur-sm shadow-lg border border-white/50"
               style={{
-                fontFamily: "'Mochiy Pop One', sans-serif",
-                fontWeight: "400",
+                left: "57.5%",
+                top: "52.7%",
+                width: "41.5%",
+                transform: "translate(-50%, -50%)",
+                padding: "2.4cqw 2.6cqw",
+                borderRadius: "2cqw",
+                gap: "0.6cqw",
               }}
             >
-              {speaker.name}
-            </h3>
-            <p className="text-black font-medium leading-relaxed">
-              {speaker.desc}
-            </p>
+              <h3
+                className="text-black leading-tight"
+                style={{
+                  fontSize: "2.2cqw",
+                  fontFamily: "'Mochiy Pop One', sans-serif",
+                  fontWeight: 400,
+                }}
+              >
+                {item.name}
+              </h3>
+              <p
+                className="text-black font-medium"
+                style={{ fontSize: "1.32cqw", lineHeight: 1.35 }}
+              >
+                {item.desc}
+              </p>
+            </div>
           </div>
         ))}
-      </div>
 
-      <div className="flex gap-8 z-40">
-        <button
-          onClick={prevSpeaker}
-          className="p-2 text-black hover:text-gray-500 transition-colors focus:outline-none"
-          aria-label="Previous Speaker"
+        {/* Arrows - Figma: centred at ~(718, 879) */}
+        <div
+          className="absolute z-40 flex -translate-x-1/2 -translate-y-1/2"
+          style={{ left: "50%", top: "81.3%", gap: "1.9cqw" }}
         >
-          <ArrowLeft size={40} strokeWidth={3} />
-        </button>
-        <button
-          onClick={nextSpeaker}
-          className="p-2 text-black hover:text-gray-500 transition-colors focus:outline-none"
-          aria-label="Next Speaker"
-        >
-          <ArrowRight size={40} strokeWidth={3} />
-        </button>
+          <button
+            onClick={prev}
+            className="text-black hover:text-gray-500 transition-colors focus:outline-none"
+            style={{ padding: "0.6cqw" }}
+            aria-label="Previous Speaker"
+          >
+            <ArrowLeft
+              strokeWidth={3}
+              style={{ width: "3.05cqw", height: "3.05cqw" }}
+            />
+          </button>
+          <button
+            onClick={next}
+            className="text-black hover:text-gray-500 transition-colors focus:outline-none"
+            style={{ padding: "0.6cqw" }}
+            aria-label="Next Speaker"
+          >
+            <ArrowRight
+              strokeWidth={3}
+              style={{ width: "3.05cqw", height: "3.05cqw" }}
+            />
+          </button>
+        </div>
       </div>
     </section>
   );
