@@ -21,7 +21,7 @@ const LandingSection = () => {
   return (
     <section
       id="landing"
-      className="relative flex min-h-[100svh] w-full items-center justify-center bg-[#f4f9fc] overflow-hidden"
+      className="relative flex min-h-[100svh] w-full items-center justify-center bg-[#e1edf5] overflow-hidden"
     >
       <div
         className="relative shrink-0"
@@ -59,6 +59,7 @@ const LandingSection = () => {
           style={{ left: "16.875%", top: "35.25%", width: "66.18%" }}
         >
           {/* The white glow backdrop */}
+          {/* TODO: MAKE GLOW MORE VISIBLE */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] h-[80%] bg-white blur-3xl rounded-[100%] opacity-90 z-0"></div>
           <Image
             src={logo}

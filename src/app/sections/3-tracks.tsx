@@ -79,7 +79,7 @@ const TracksSection = () => {
   return (
     <section
       id="tracks"
-      className="relative flex min-h-[100svh] w-full items-center justify-center bg-[#f4f9fc] overflow-hidden"
+      className="relative flex min-h-[100svh] w-full items-center justify-center bg-[#e1edf5] overflow-hidden border-t-5 border-white"
     >
       <div
         className="relative shrink-0"

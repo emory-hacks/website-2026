@@ -54,7 +54,7 @@ const FaqSection = () => {
   return (
     <section
       id="qna"
-      className="relative flex min-h-[100svh] w-full items-center justify-center bg-[#f4f9fc] overflow-hidden"
+      className="relative flex min-h-[100svh] w-full items-center justify-center bg-[#d7edfa] overflow-hidden border-t-5 border-white"
     >
       <div
         className="relative shrink-0"

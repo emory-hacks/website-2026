@@ -6,7 +6,7 @@ const SponsorsSection = () => {
   return (
     <section
       id="sponsors"
-      className="relative w-full bg-[#f4f9fc] px-6 py-24 sm:py-32"
+      className="relative w-full bg-[#e1edf5] px-6 py-24 sm:py-32 border-t-5 border-white"
     >
       <div className="mx-auto flex max-w-3xl flex-col items-center">
         <h2

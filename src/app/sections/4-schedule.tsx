@@ -14,6 +14,7 @@ interface ScheduleDay {
   events: ScheduleEvent[];
 }
 
+// TODO: CALL SCHEDULE API FOR DATA
 const SCHEDULE: ScheduleDay[] = [
   {
     date: "11/13",
@@ -78,7 +79,7 @@ const ScheduleSection = () => {
   return (
     <section
       id="schedule"
-      className="relative flex min-h-[100svh] w-full items-center justify-center bg-[#f4f9fc] overflow-hidden"
+      className="relative flex min-h-[100svh] w-full items-center justify-center bg-[#d7edfa] overflow-hidden border-t-5 border-white"
     >
       <div
         className="relative shrink-0"
