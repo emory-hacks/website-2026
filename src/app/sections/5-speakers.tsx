@@ -1,87 +1,112 @@
 "use client";
 
-import Image from "next/image";
-import LeafCarousel from "@/components/ui/carousel";
-import speakerData from "@/lib/speakers.json";
+import { useState } from "react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
-const SPEAKERS_TBA = true;
-
-interface Speaker {
-  name: string;
-  description: string;
-  img?: string;
-}
-
-const data: Speaker[] = speakerData;
+const speakerData = [
+  {
+    id: 1,
+    name: "Speaker 1",
+    desc: "Torem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
+  },
+  {
+    id: 2,
+    name: "Speaker 2",
+    desc: "Torem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
+  },
+  {
+    id: 3,
+    name: "Speaker 3",
+    desc: "Torem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
+  },
+  {
+    id: 4,
+    name: "Speaker 4",
+    desc: "Torem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
+  },
+];
 
 const SpeakerSection = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const nextSpeaker = () => {
+    setCurrentIndex((prev) => (prev === speakerData.length - 1 ? 0 : prev + 1));
+  };
+
+  const prevSpeaker = () => {
+    setCurrentIndex((prev) => (prev === 0 ? speakerData.length - 1 : prev - 1));
+  };
+
+  const getCardStyle = (index: number) => {
+    const total = speakerData.length;
+    const offset = (index - currentIndex + total) % total;
+
+    // Cards
+    if (offset === 0) {
+      return "left-1/2 -translate-x-1/2 scale-100 z-30 opacity-100 shadow-xl bg-[#9cc044]";
+    }
+    if (offset === 1) {
+      return "left-[70%] md:left-[72%] -translate-x-1/2 scale-90 z-20 opacity-60 shadow-md bg-[#b5d365]";
+    }
+    if (offset === total - 1) {
+      return "left-[30%] md:left-[28%] -translate-x-1/2 scale-90 z-20 opacity-60 shadow-md bg-[#b5d365]";
+    }
+    return "left-1/2 -translate-x-1/2 scale-75 -translate-y-8 z-10 opacity-30 bg-[#cce393]";
+  };
+
   return (
-    <LeafCarousel
+    <section
       id="speakers"
-      title="SPEAKERS"
-      items={data}
-      getKey={(item) => item.name}
-      firstLeaf="ant"
-      itemLabel="Speaker"
-      cardWidth="41.5%"
-      disabled={SPEAKERS_TBA}
-      cardStyle={
-        SPEAKERS_TBA
-          ? { alignItems: "center", justifyContent: "center" }
-          : undefined
-      }
-      renderCard={(item) =>
-        SPEAKERS_TBA ? (
-          <h3
-            className="text-black leading-tight"
-            style={{
-              fontSize: "2.2cqw",
-              fontFamily: "'Mochiy Pop One', sans-serif",
-              fontWeight: 400,
-              padding: "1.6cqw 0",
-            }}
+      className="relative min-h-screen w-full bg-[#f4f9fc] flex flex-col items-center justify-center overflow-hidden py-20"
+    >
+      <h2
+        className="text-5xl md:text-7xl text-black mb-16 z-20"
+        style={{ fontFamily: "'Mochiy Pop One', sans-serif" }}
+      >
+        SPEAKERS
+      </h2>
+
+      <div className="relative w-full max-w-5xl h-[400px] flex items-center justify-center mb-8">
+        {speakerData.map((speaker, index) => (
+          <div
+            key={speaker.id}
+            className={`absolute transition-all duration-500 ease-in-out w-[400px] md:w-[590px] h-[350px] p-8 flex flex-col justify-center rounded-sm ${getCardStyle(
+              index,
+            )}`}
           >
-            TBA
-          </h3>
-        ) : (
-          <>
-            <div className="flex items-center" style={{ gap: "1.2cqw" }}>
-              {item.img && (
-                <Image
-                  src={item.img}
-                  alt={item.name}
-                  width={128}
-                  height={128}
-                  className="shrink-0 rounded-full object-cover"
-                  style={{ width: "4.5cqw", height: "4.5cqw" }}
-                />
-              )}
-              <h3
-                className="text-black leading-tight"
-                style={{
-                  fontSize: "2.2cqw",
-                  fontFamily: "'Mochiy Pop One', sans-serif",
-                  fontWeight: 400,
-                }}
-              >
-                {item.name}
-              </h3>
-            </div>
-            <p
-              className="custom-scrollbar overflow-y-auto text-black font-medium"
+            <h3
+              className="text-3xl font-black text-black mb-4"
               style={{
-                fontSize: "1.32cqw",
-                lineHeight: 1.35,
-                maxHeight: "7.4cqw",
-                paddingRight: "0.6cqw",
+                fontFamily: "'Mochiy Pop One', sans-serif",
+                fontWeight: "400",
               }}
             >
-              {item.description}
+              {speaker.name}
+            </h3>
+            <p className="text-black font-medium leading-relaxed">
+              {speaker.desc}
             </p>
-          </>
-        )
-      }
-    />
+          </div>
+        ))}
+      </div>
+
+      <div className="flex gap-8 z-40">
+        <button
+          onClick={prevSpeaker}
+          className="p-2 text-black hover:text-gray-500 transition-colors focus:outline-none"
+          aria-label="Previous Speaker"
+        >
+          <ArrowLeft size={40} strokeWidth={3} />
+        </button>
+        <button
+          onClick={nextSpeaker}
+          className="p-2 text-black hover:text-gray-500 transition-colors focus:outline-none"
+          aria-label="Next Speaker"
+        >
+          <ArrowRight size={40} strokeWidth={3} />
+        </button>
+      </div>
+    </section>
   );
 };
 

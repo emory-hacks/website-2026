@@ -1,73 +1,29 @@
 "use client";
 
-import Image from "next/image";
-import flower1 from "@/images/about_flower1.png";
-import flower3 from "@/images/about_flower3.png";
-
 const AboutSection = () => {
   return (
     <section
       id="about"
-      className="relative flex min-h-[100svh] w-full items-center justify-center bg-[#d7edfa] overflow-hidden border-t-5 border-white"
+      className="relative min-h-screen w-full bg-[#f4f9fc] flex flex-col items-center justify-center overflow-hidden py-20"
     >
-      <div
-        className="relative shrink-0"
-        style={{
-          width: "min(100%, calc(100svh * 1440 / 1081))",
-          aspectRatio: "1440 / 1081",
-          containerType: "inline-size",
-        }}
-      >
-        {/* Flower 1 */}
-        <div
-          className="pointer-events-none absolute z-0"
-          style={{ left: "17.09%", top: "48.57%", width: "20.75%" }}
-        >
-          <Image src={flower1} alt="" className="w-full h-auto" />
-        </div>
+      {/* Left Green Graphic Placeholder */}
+      <div className="absolute left-[5%] md:left-[15%] top-[45%] w-[30vw] md:w-[15vw] h-[40vh] bg-[#9cc044]"></div>
 
-        {/* Flower 3 */}
-        <div
-          className="pointer-events-none absolute z-0"
-          style={{
-            left: "68.53%",
-            top: "48.17%",
-            width: "10.9%",
-            transform: "rotate(20.92deg)",
-          }}
-        >
-          <Image src={flower3} alt="" className="w-full h-auto" />
-        </div>
+      {/* Right Green Graphic Placeholder */}
+      <div className="absolute right-[5%] md:right-[15%] top-[45%] w-[30vw] md:w-[15vw] h-[40vh] bg-[#9cc044]"></div>
 
+      {/* Center Content Wrapper */}
+      <div className="relative z-10 flex flex-col items-center w-[90%] sm:w-[80%] md:w-[60%] lg:w-[45%]">
         {/* Title */}
         <h2
-          className="absolute z-20 -translate-x-1/2 whitespace-nowrap leading-none text-black"
-          style={{
-            left: "51.3%",
-            top: "23.6%",
-            fontSize: "5.35cqw",
-            fontFamily: "'Mochiy Pop One', sans-serif",
-          }}
+          className="text-5xl md:text-7xl text-black mb-8 z-20"
+          style={{ fontFamily: "'Mochiy Pop One', sans-serif" }}
         >
           ABOUT
         </h2>
 
-        {/* Card */}
-        <div
-          className="absolute z-10 flex flex-col items-center bg-white/80 backdrop-blur-md shadow-xl border border-white/40"
-          style={{
-            left: "29.79%",
-            top: "33.77%",
-            width: "43.06%",
-            borderRadius: "2.083cqw",
-            padding: "4.167cqw",
-            gap: "0.694cqw",
-          }}
-        >
-          <p
-            className="text-center text-gray-900 font-medium"
-            style={{ fontSize: "1.39cqw", lineHeight: 2 }}
-          >
+        <div className="bg-white/80 backdrop-blur-md rounded-[40px] p-8 md:p-12 shadow-xl border border-white/40">
+          <p className="text-center text-lg md:text-xl leading-[2] text-gray-900 font-medium">
             Emory Hacks, presented by PROJECT Emory, is a hackathon hosted at
             Emory University. We are committed to bringing hundreds of students
             together for an intensive 36-hour hackathon where innovation comes
