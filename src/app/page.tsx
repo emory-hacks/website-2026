@@ -18,7 +18,7 @@ const Page = memo(() => {
       {/* <ScheduleSection /> */}
       {/* <SpeakerSection /> */}
       {/* <FaqSection /> */}
-      {/* <SponsorsSection /> */}
+      {/* <SponsorsSection /> */} 
     </main>
   );
 });

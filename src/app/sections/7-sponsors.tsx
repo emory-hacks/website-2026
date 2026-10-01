@@ -24,7 +24,7 @@ const SponsorCard = ({ sponsor }: { sponsor: Sponsor }) => {
     <Image
       src={sponsor.logo}
       alt={sponsor.name}
-      className="max-h-full max-w-full object-contain"
+      className="max-w-full object-contain"
     />
   ) : (
     <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-neutral-200 text-neutral-400">
