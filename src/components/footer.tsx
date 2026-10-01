@@ -1,39 +1,93 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Instagram, Linkedin, Mail } from "lucide-react";
+import flowerPink from "@/images/home_flower1.png";
+import flowerOrange from "@/images/home_flower2.png";
 
 const Footer = () => {
   return (
-    <footer className="relative w-full bg-[#f4f9fc] flex flex-col items-center justify-center min-h-[400px] overflow-hidden">
-      {/* Left Green Graphic Placeholder */}
-      <div className="absolute left-0 bottom-0 w-[35vw] md:w-[30vw] h-[25vh] bg-[#9cc044]"></div>
+    <footer
+      className="relative w-full bg-[#d7edfa] overflow-hidden border-t-5 border-white"
+      style={{ aspectRatio: "1440 / 493", containerType: "inline-size" }}
+    >
+      {/* Flower 2 */}
+      <div
+        className="pointer-events-none absolute z-0"
+        style={{
+          left: "-15.76%",
+          top: "4.67%",
+          width: "63.19%",
+          aspectRatio: "910 / 747",
+          transform: "scaleX(-1)",
+        }}
+      >
+        <Image
+          src={flowerOrange}
+          alt=""
+          fill
+          sizes="65vw"
+          className="object-contain"
+        />
+      </div>
 
-      {/* Right Green Graphic Placeholder */}
-      <div className="absolute right-0 bottom-0 w-[35vw] md:w-[30vw] h-[25vh] bg-[#9cc044]"></div>
+      {/* Flower 1 */}
+      <div
+        className="pointer-events-none absolute z-0"
+        style={{
+          left: "65.9%",
+          top: "14.6%",
+          width: "46.32%",
+          aspectRatio: "667 / 794",
+          transform: "scaleX(-1)",
+        }}
+      >
+        <Image
+          src={flowerPink}
+          alt=""
+          fill
+          sizes="50vw"
+          className="object-contain"
+        />
+      </div>
 
-      <div className="relative z-10 flex flex-col items-center text-center translate-y-[6vh] md:translate-y-[12vh]">
+      {/* Text */}
+      <div
+        className="absolute z-10 flex flex-col items-center text-center -translate-x-1/2"
+        style={{ left: "50%", top: "60.6%" }}
+      >
         {/* Title */}
         <h2
-          className="text-base md:text-xl text-black"
-          style={{ fontFamily: "'Mochiy Pop One', sans-serif" }}
+          className="text-black whitespace-nowrap"
+          style={{
+            fontFamily: "'Mochiy Pop One', sans-serif",
+            fontSize: "1.39cqw",
+            lineHeight: 1.3,
+          }}
         >
           EMORY HACKS 2026
         </h2>
 
         {/* Contact Us */}
-        <p className="font-bold text-xs md:text-sm text-black mb-2">
+        <p
+          className="font-bold text-black"
+          style={{ fontSize: "1.1cqw", marginTop: "4.4cqw", lineHeight: 1.3 }}
+        >
           Contact Us
         </p>
 
         {/* Social Icons */}
-        <div className="flex justify-center items-center gap-6 mb-12">
+        <div
+          className="flex justify-center items-center"
+          style={{ gap: "1.67cqw", marginTop: "0.55cqw" }}
+        >
           <a
             href="mailto:hello@emoryhacks.com"
             className="text-gray-700 hover:text-black transition-colors"
             aria-label="Email"
           >
-            <Mail className="size-5 md:size-6" />
+            <Mail style={{ width: "1.67cqw", height: "1.67cqw" }} />
           </a>
           <a
             href="https://www.instagram.com/emoryhacks_"
@@ -42,7 +96,7 @@ const Footer = () => {
             className="text-gray-700 hover:text-black transition-colors"
             aria-label="Instagram"
           >
-            <Instagram className="size-5 md:size-6" />
+            <Instagram style={{ width: "1.67cqw", height: "1.67cqw" }} />
           </a>
           <a
             href="https://www.linkedin.com/company/project-emory/"
@@ -51,7 +105,7 @@ const Footer = () => {
             className="text-gray-700 hover:text-black transition-colors"
             aria-label="LinkedIn"
           >
-            <Linkedin className="size-5 md:size-6" />
+            <Linkedin style={{ width: "1.67cqw", height: "1.67cqw" }} />
           </a>
         </div>
 
@@ -59,7 +113,8 @@ const Footer = () => {
         <Link
           href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md"
           target="_blank"
-          className="text-xs md:text-sm text-gray-500 hover:text-gray-800 underline transition-colors font-medium"
+          className="text-gray-500 hover:text-gray-800 underline transition-colors font-medium"
+          style={{ fontSize: "0.9cqw", marginTop: "0.9cqw" }}
         >
           MLH Code of Conduct
         </Link>

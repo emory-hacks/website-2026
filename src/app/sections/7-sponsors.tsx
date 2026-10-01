@@ -2,6 +2,9 @@
 
 import Image, { type StaticImageData } from "next/image";
 import { ImageIcon } from "lucide-react";
+import coderLogo from "@/images/sponsors/coder.png";
+import openmajorsLogo from "@/images/sponsors/openmajors.png";
+import typesenseLogo from "@/images/sponsors/typesense.svg";
 
 interface Sponsor {
   name: string;
@@ -9,9 +12,11 @@ interface Sponsor {
   url?: string;
 }
 
+// 2) One entry per card. Add/remove entries to add/remove cards.
 const SPONSORS: Sponsor[] = [
-  { name: "Sponsor 1" /* , logo: acmeLogo, url: "https://acme.com" */ },
-  { name: "Sponsor 2" /* , logo: globexLogo, url: "https://globex.com" */ },
+  { name: "Coder", logo: coderLogo /*, url: "https://acme.com" */ },
+  { name: "OpenMajors", logo: openmajorsLogo /*, url: "https://globex.com" */ },
+  { name: "typesense", logo: typesenseLogo /* , url: "https://globex.com" */ },
 ];
 
 const SponsorCard = ({ sponsor }: { sponsor: Sponsor }) => {
@@ -22,7 +27,7 @@ const SponsorCard = ({ sponsor }: { sponsor: Sponsor }) => {
       className="max-h-full max-w-full object-contain"
     />
   ) : (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-xl text-neutral-400">
+    <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-neutral-200 text-neutral-400">
       <ImageIcon className="size-7" strokeWidth={1.5} />
       <span className="text-sm font-medium">{sponsor.name}</span>
     </div>
@@ -50,7 +55,7 @@ const SponsorsSection = () => {
   return (
     <section
       id="sponsors"
-      className="relative w-full bg-[#f4f9fc] px-6 py-24 sm:py-32"
+      className="relative w-full bg-[#e1edf5] px-6 py-24 sm:py-32 border-t-5 border-white"
     >
       <div className="mx-auto flex max-w-3xl flex-col items-center">
         <h2

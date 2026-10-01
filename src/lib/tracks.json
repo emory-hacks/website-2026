@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "title": "Healthcare",
+    "desc": "Develop innovative solutions to improve patient care, streamline medical processes, or enhance health outcomes using technology. Projects can involve patient care, healthcare operations, wellness, or medical accessibility in honor of Emory's commitment to advancing human health."
+  },
+  {
+    "id": 2,
+    "title": "Entertainment",
+    "desc": "Create engaging experiences that entertain, inspire, and connect users through interactive technologies and creative digital media. Projects can explore gaming, music, virtual experiences, or other forms of entertainment to make them more accessible, immersive, and enjoyable."
+  },
+  {
+    "id": 3,
+    "title": "Security",
+    "desc": "Build tools and systems that enhance digital safety, protect personal information, and strengthen trust in technology.   Projects can focus on improving data privacy, detecting online threats, or helping users navigate digital spaces more securely and confidently."
+  },
+  {
+    "id": 4,
+    "title": "Rogue",
+    "desc": "Open-ended track for beginners to work on any project they find interesting.   No specific theme or requirements, just build something you want to make. Could be a web app, mobile app, game, or any other software project. Focus is on learning and experimenting."
+  }
+]
