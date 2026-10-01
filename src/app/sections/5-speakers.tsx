@@ -5,46 +5,39 @@ import Image from "next/image";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import leafAnt from "@/images/tracks_leaf1.png";
 import leafLadybug from "@/images/tracks_leaf2.png";
+import speakerData from "@/lib/speakers.json";
 
-const speakerData = [
-  {
-    id: 1,
-    name: "Speaker 1",
-    desc: "Torem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
-  },
-  {
-    id: 2,
-    name: "Speaker 2",
-    desc: "Torem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
-  },
-  {
-    id: 3,
-    name: "Speaker 3",
-    desc: "Torem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
-  },
-  {
-    id: 4,
-    name: "Speaker 4",
-    desc: "Torem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
-  },
-];
+const SPEAKERS_TBA = true;
+
+interface Speaker {
+  name: string;
+  description: string;
+  img?: string;
+}
+
+const data: Speaker[] = speakerData;
 
 const SIDE_SHIFT = "46.3%"; // how far side slides move
 const SIDE_LIFT = "-3.8%"; // side slides sit slightly higher than the center one
+
+const arrowButtonClass =
+  "text-black hover:text-gray-500 transition-colors focus:outline-none disabled:opacity-30 disabled:text-gray-300 disabled:hover:text-gray-300 disabled:cursor-not-allowed";
 
 const SpeakerSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const next = () => {
-    setCurrentIndex((prev) => (prev === speakerData.length - 1 ? 0 : prev + 1));
+    if (SPEAKERS_TBA) return;
+    setCurrentIndex((prev) => (prev === data.length - 1 ? 0 : prev + 1));
   };
 
   const prev = () => {
-    setCurrentIndex((prev) => (prev === 0 ? speakerData.length - 1 : prev - 1));
+    if (SPEAKERS_TBA) return;
+    setCurrentIndex((prev) => (prev === 0 ? data.length - 1 : prev - 1));
   };
 
   const getSlideStyle = (index: number): React.CSSProperties => {
-    const total = speakerData.length;
+    const total = data.length;
     const offset = (index - currentIndex + total) % total;
 
     if (offset === 0) {
@@ -105,7 +98,7 @@ const SpeakerSection = () => {
         {/* Slides */}
         {speakerData.map((item, index) => (
           <div
-            key={item.id}
+            key={item.name}
             className="absolute transition-all duration-500 ease-in-out"
             style={{
               left: "12.22%",
@@ -132,24 +125,62 @@ const SpeakerSection = () => {
                 padding: "2.4cqw 2.6cqw",
                 borderRadius: "2cqw",
                 gap: "0.6cqw",
+                ...(SPEAKERS_TBA && {
+                  alignItems: "center",
+                  justifyContent: "center",
+                }),
               }}
             >
-              <h3
-                className="text-black leading-tight"
-                style={{
-                  fontSize: "2.2cqw",
-                  fontFamily: "'Mochiy Pop One', sans-serif",
-                  fontWeight: 400,
-                }}
-              >
-                {item.name}
-              </h3>
-              <p
-                className="text-black font-medium"
-                style={{ fontSize: "1.32cqw", lineHeight: 1.35 }}
-              >
-                {item.desc}
-              </p>
+              {SPEAKERS_TBA ? (
+                <h3
+                  className="text-black leading-tight"
+                  style={{
+                    fontSize: "2.2cqw",
+                    fontFamily: "'Mochiy Pop One', sans-serif",
+                    fontWeight: 400,
+                    padding: "1.6cqw 0",
+                  }}
+                >
+                  TBA
+                </h3>
+              ) : (
+                <>
+                  <div className="flex items-center" style={{ gap: "1.2cqw" }}>
+                    {item.img && (
+                      <Image
+                        src={item.img}
+                        alt={item.name}
+                        width={128}
+                        height={128}
+                        className="shrink-0 rounded-full object-cover"
+                        style={{ width: "4.5cqw", height: "4.5cqw" }}
+                      />
+                    )}
+                    <h3
+                      className="text-black leading-tight"
+                      style={{
+                        fontSize: "2.2cqw",
+                        fontFamily: "'Mochiy Pop One', sans-serif",
+                        fontWeight: 400,
+                      }}
+                    >
+                      {item.name}
+                    </h3>
+                  </div>
+                  {/* Bios are long, so the text scrolls inside the card */}
+                  <p
+                    className="custom-scrollbar overflow-y-auto text-black font-medium"
+                    style={{
+                      fontSize: "1.32cqw",
+                      lineHeight: 1.35,
+                      maxHeight: "7.4cqw",
+                      paddingRight: "0.6cqw",
+                    }}
+                  >
+                    {item.description}
+                  </p>
+                </>
+              )}
             </div>
           </div>
         ))}
@@ -161,9 +192,10 @@ const SpeakerSection = () => {
         >
           <button
             onClick={prev}
-            className="text-black hover:text-gray-500 transition-colors focus:outline-none"
+            className={arrowButtonClass}
             style={{ padding: "0.6cqw" }}
             aria-label="Previous Speaker"
+            disabled={SPEAKERS_TBA}
           >
             <ArrowLeft
               strokeWidth={3}
@@ -172,9 +204,10 @@ const SpeakerSection = () => {
           </button>
           <button
             onClick={next}
-            className="text-black hover:text-gray-500 transition-colors focus:outline-none"
+            className={arrowButtonClass}
             style={{ padding: "0.6cqw" }}
             aria-label="Next Speaker"
+            disabled={SPEAKERS_TBA}
           >
             <ArrowRight
               strokeWidth={3}

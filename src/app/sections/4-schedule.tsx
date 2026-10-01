@@ -1,68 +1,41 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import scheduleData from "@/lib/schedule.json";
 
-interface ScheduleEvent {
-  time: string;
-  title: string;
-}
+const SCHEDULE_TBA = true;
 
-interface ScheduleDay {
-  date: string;
-  day: string;
-  events: ScheduleEvent[];
-}
+const DAY_DATES: Record<string, string> = {
+  Friday: "11/13",
+  Saturday: "11/14",
+  Sunday: "11/15",
+};
 
-// TODO: CALL SCHEDULE API FOR DATA
-const SCHEDULE: ScheduleDay[] = [
-  {
-    date: "11/13",
-    day: "Friday",
-    events: [
-      { time: "5:00 PM", title: "Event 1" },
-      { time: "6:00 PM", title: "Event 2" },
-      { time: "7:00 PM", title: "Event 3" },
-      { time: "8:00 PM", title: "Event 4" },
-      { time: "10:00 PM", title: "Event 5" },
-      { time: "12:00 AM", title: "Event 6" },
-    ],
-  },
-  {
-    date: "11/14",
-    day: "Saturday",
-    events: [
-      { time: "8:00 AM", title: "Event 7" },
-      { time: "10:00 AM", title: "Event 8" },
-      { time: "12:00 PM", title: "Event 9" },
-      { time: "2:00 PM", title: "Event 10" },
-      { time: "6:00 PM", title: "Event 11" },
-      { time: "9:00 PM", title: "Event 12" },
-    ],
-  },
-  {
-    date: "11/15",
-    day: "Sunday",
-    events: [
-      { time: "8:00 AM", title: "Event 13" },
-      { time: "10:00 AM", title: "Event 14" },
-      { time: "11:00 AM", title: "Event 15" },
-      { time: "12:00 PM", title: "Event 16" },
-      { time: "2:00 PM", title: "Event 17" },
-      { time: "3:00 PM", title: "Event 18" },
-    ],
-  },
-];
+const ROW_PX = 25;
+const BLOCK_PX = 355;
+const DESIGN_PX_PER_CQW = 14.4;
+const getRowGap = (count: number) => {
+  if (count <= 1) return "0cqw";
+  const px = Math.max(
+    8,
+    Math.min(41, (BLOCK_PX - count * ROW_PX) / (count - 1)),
+  );
+  return `${(px / DESIGN_PX_PER_CQW).toFixed(3)}cqw`;
+};
+
+const formatTime = (time: string) => time.replace(/^0/, "");
 
 const arrowClass =
   "absolute z-20 -translate-x-1/2 -translate-y-1/2 text-black hover:text-gray-500 transition-colors focus:outline-none disabled:opacity-30 disabled:text-gray-300 disabled:hover:text-gray-300 disabled:cursor-not-allowed";
 
 const ScheduleSection = () => {
   const [dayIndex, setDayIndex] = useState(0);
-  const activeDay = SCHEDULE[dayIndex];
+  const activeDay = scheduleData[dayIndex];
+  const dayDate = DAY_DATES[activeDay.day];
 
   const isFirstDay = dayIndex === 0;
-  const isLastDay = dayIndex === SCHEDULE.length - 1;
+  const isLastDay = dayIndex === scheduleData.length - 1;
 
   const goToPrevious = () => {
     if (!isFirstDay) {
@@ -140,22 +113,36 @@ const ScheduleSection = () => {
               letterSpacing: 0,
             }}
           >
-            {activeDay.date} ({activeDay.day})
+            {dayDate ? `${dayDate} (${activeDay.day})` : activeDay.day}
           </p>
 
-          {/* Times & events */}
-          <div
-            className="flex flex-col border-l border-black"
-            style={{
-              width: "27.6cqw",
-              gap: "2.85cqw",
-              padding: "0 2.78cqw",
-              marginLeft: "2.78cqw",
-            }}
-          >
-            {activeDay.events.map((event) => (
-              <Fragment key={`${activeDay.date}-${event.time}-${event.title}`}>
+          {SCHEDULE_TBA ? (
+            <div className="flex flex-1 items-center justify-center">
+              <p
+                className="text-neutral-400"
+                style={{
+                  fontFamily: "'Mochiy Pop One', sans-serif",
+                  fontWeight: 400,
+                  fontSize: "2.78cqw",
+                }}
+              >
+                TBA
+              </p>
+            </div>
+          ) : (
+            /* Times & events + vertical line */
+            <div
+              className="flex flex-col border-l border-black"
+              style={{
+                width: "27.6cqw",
+                gap: getRowGap(activeDay.events.length),
+                padding: "0 2.78cqw",
+                marginLeft: "2.78cqw",
+              }}
+            >
+              {activeDay.events.map((event, i) => (
                 <div
+                  key={`${activeDay.day}-${i}-${event.time}`}
                   className="grid items-center"
                   style={{
                     gridTemplateColumns: "11.1cqw 1fr",
@@ -164,13 +151,13 @@ const ScheduleSection = () => {
                   }}
                 >
                   <span className="font-semibold text-neutral-800">
-                    {event.time}
+                    {formatTime(event.time)}
                   </span>
-                  <span className="text-neutral-700">{event.title}</span>
+                  <span className="text-neutral-700">{event.description}</span>
                 </div>
-              </Fragment>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Next arrow */}

@@ -3,46 +3,9 @@
 import { useState } from "react";
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
-import flower3 from "@/images/about_flower3.png"; // bud (left)
-import flower2 from "@/images/about_flower2.png"; // single flower (right)
-
-const faqData = [
-  {
-    question: "Vorem ipsum dolor sit amet, consectetur adipiscing elit?",
-    answer:
-      "Corem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
-  },
-  {
-    question: "Vorem ipsum dolor sit amet, consectetur adipiscing elit?",
-    answer:
-      "Corem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
-  },
-  {
-    question: "Vorem ipsum dolor sit amet, consectetur adipiscing elit?",
-    answer:
-      "Corem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
-  },
-  {
-    question: "Vorem ipsum dolor sit amet, consectetur adipiscing elit?",
-    answer:
-      "Corem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
-  },
-  {
-    question: "Vorem ipsum dolor sit amet, consectetur adipiscing elit?",
-    answer:
-      "Corem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
-  },
-  {
-    question: "Vorem ipsum dolor sit amet, consectetur adipiscing elit?",
-    answer:
-      "Corem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
-  },
-  {
-    question: "Vorem ipsum dolor sit amet, consectetur adipiscing elit?",
-    answer:
-      "Corem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
-  },
-];
+import flower3 from "@/images/about_flower3.png";
+import flower2 from "@/images/about_flower2.png";
+import faqData from "@/lib/faq.json";
 
 const FaqSection = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -147,7 +110,7 @@ const FaqSection = () => {
                   <h3
                     className="text-gray-900 group-hover:text-gray-600 transition-colors"
                     style={{
-                      fontSize: "1.32cqw",
+                      fontSize: "18px",
                       lineHeight: 1.3,
                       fontFamily: "'Mochiy Pop One', sans-serif",
                       fontWeight: 400,
@@ -176,7 +139,7 @@ const FaqSection = () => {
                     <p
                       className="text-gray-700 font-medium"
                       style={{
-                        fontSize: "1.1cqw",
+                        fontSize: "14px",
                         lineHeight: 1.5,
                         paddingRight: "2cqw",
                       }}

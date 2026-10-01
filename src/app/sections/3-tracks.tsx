@@ -5,46 +5,31 @@ import Image from "next/image";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import leafAnt from "@/images/tracks_leaf1.png";
 import leafLadybug from "@/images/tracks_leaf2.png";
+import tracksData from "@/lib/tracks.json";
 
-const trackData = [
-  {
-    id: 1,
-    title: "Healthcare",
-    desc: "Torem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
-  },
-  {
-    id: 2,
-    title: "Environment",
-    desc: "Torem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
-  },
-  {
-    id: 3,
-    title: "Education",
-    desc: "Torem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
-  },
-  {
-    id: 4,
-    title: "Finance",
-    desc: "Torem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
-  },
-];
+interface Track {
+  title: string;
+  desc: string;
+}
 
-const SIDE_SHIFT = "46.3%"; // how far side slides move
-const SIDE_LIFT = "-3.8%"; // side slides sit slightly higher than the center one
+const data: Track[] = tracksData;
+
+const SIDE_SHIFT = "46.3%"; // how far side slides move (of slide width)
+const SIDE_LIFT = "-3.8%"; // side slides sit slightly higher than the centre one
 
 const TracksSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const next = () => {
-    setCurrentIndex((prev) => (prev === trackData.length - 1 ? 0 : prev + 1));
+    setCurrentIndex((prev) => (prev === data.length - 1 ? 0 : prev + 1));
   };
 
   const prev = () => {
-    setCurrentIndex((prev) => (prev === 0 ? trackData.length - 1 : prev - 1));
+    setCurrentIndex((prev) => (prev === 0 ? data.length - 1 : prev - 1));
   };
 
   const getSlideStyle = (index: number): React.CSSProperties => {
-    const total = trackData.length;
+    const total = data.length;
     const offset = (index - currentIndex + total) % total;
 
     if (offset === 0) {
@@ -103,9 +88,9 @@ const TracksSection = () => {
         </h2>
 
         {/* Slides */}
-        {trackData.map((item, index) => (
+        {data.map((item, index) => (
           <div
-            key={item.id}
+            key={item.title}
             className="absolute transition-all duration-500 ease-in-out"
             style={{
               left: "12.22%",
@@ -127,7 +112,7 @@ const TracksSection = () => {
               style={{
                 left: "57.5%",
                 top: "52.7%",
-                width: "41.5%",
+                width: "45%",
                 transform: "translate(-50%, -50%)",
                 padding: "2.4cqw 2.6cqw",
                 borderRadius: "2cqw",

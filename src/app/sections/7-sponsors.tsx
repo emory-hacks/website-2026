@@ -1,6 +1,6 @@
 "use client";
 
-const SPONSOR_SLOTS = [1, 2];
+const SPONSOR_SLOTS = [1];
 
 const SponsorsSection = () => {
   return (
@@ -23,7 +23,16 @@ const SponsorsSection = () => {
             <div
               key={slot}
               className="h-32 w-56 rounded-2xl bg-white shadow-sm"
-            />
+            >
+              <p
+                className="flex h-full w-full items-center justify-center text-neutral-400"
+                style={{
+                  fontFamily: "'Mochiy Pop One', sans-serif",
+                }}
+              >
+                TBA
+              </p>
+            </div>
           ))}
         </div>
       </div>
