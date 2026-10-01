@@ -1,10 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { Instagram, Linkedin, Mail } from "lucide-react";
-import flowerPink from "@/images/home_flower1.png";
-import flowerOrange from "@/images/home_flower2.png";
 
 const Footer = () => {
   return (
@@ -12,46 +9,6 @@ const Footer = () => {
       className="relative w-full bg-[#e1edf5] overflow-hidden"
       style={{ aspectRatio: "1440 / 493", containerType: "inline-size" }}
     >
-      {/* Flower 2 */}
-      <div
-        className="pointer-events-none absolute z-0"
-        style={{
-          left: "-15.76%",
-          top: "4.67%",
-          width: "63.19%",
-          aspectRatio: "910 / 747",
-          transform: "scaleX(-1)",
-        }}
-      >
-        <Image
-          src={flowerOrange}
-          alt=""
-          fill
-          sizes="65vw"
-          className="object-contain"
-        />
-      </div>
-
-      {/* Flower 1 */}
-      <div
-        className="pointer-events-none absolute z-0"
-        style={{
-          left: "65.9%",
-          top: "14.6%",
-          width: "46.32%",
-          aspectRatio: "667 / 794",
-          transform: "scaleX(-1)",
-        }}
-      >
-        <Image
-          src={flowerPink}
-          alt=""
-          fill
-          sizes="50vw"
-          className="object-contain"
-        />
-      </div>
-
       {/* Text */}
       <div
         className="absolute z-10 flex flex-col items-center text-center -translate-x-1/2"
