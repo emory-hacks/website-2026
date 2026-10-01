@@ -7,7 +7,6 @@ import ScheduleSection from "@/app/sections/4-schedule";
 import SpeakerSection from "@/app/sections/5-speakers";
 import FaqSection from "@/app/sections/6-faq";
 import SponsorsSection from "@/app/sections/7-sponsors";
-import Link from "next/link";
 import { memo } from "react";
 
 const Page = memo(() => {

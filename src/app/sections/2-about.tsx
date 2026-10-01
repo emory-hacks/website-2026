@@ -71,10 +71,10 @@ const AboutSection = () => {
             Emory Hacks, presented by PROJECT Emory, is a hackathon hosted at
             Emory University. We are committed to bringing hundreds of students
             together for an intensive 36-hour hackathon where innovation comes
-            to life. Whether you're a first-time coder or a seasoned developer
-            come bond peers and industry professionals, and join us to push your
-            creative and technical boundaries in this dynamic weekend of
-            building and collaboration.
+            to life. Whether you&apos;re a first-time coder or a seasoned
+            developer come bond peers and industry professionals, and join us to
+            push your creative and technical boundaries in this dynamic weekend
+            of building and collaboration.
           </p>
         </div>
       </div>
