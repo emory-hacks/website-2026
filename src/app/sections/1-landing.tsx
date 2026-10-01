@@ -58,9 +58,17 @@ const LandingSection = () => {
           className="absolute z-10"
           style={{ left: "16.875%", top: "35.25%", width: "66.18%" }}
         >
-          {/* The white glow backdrop */}
-          {/* TODO: MAKE GLOW MORE VISIBLE */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] h-[80%] bg-white blur-3xl rounded-[100%] opacity-90 z-0"></div>
+          {/* Glowing backdrop */}
+          <div
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-[100%] z-0"
+            style={{
+              width: "85%",
+              height: "80%",
+              background: "#fffbe3",
+              filter: "blur(3.5cqw)",
+              opacity: 1,
+            }}
+          ></div>
           <Image
             src={logo}
             alt="Emory Hacks Logo"
