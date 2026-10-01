@@ -1,10 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import leafAnt from "@/images/tracks_leaf1.png";
-import leafLadybug from "@/images/tracks_leaf2.png";
+import LeafCarousel from "@/components/ui/carousel";
 import speakerData from "@/lib/speakers.json";
 
 const SPEAKERS_TBA = true;
@@ -17,206 +14,74 @@ interface Speaker {
 
 const data: Speaker[] = speakerData;
 
-const SIDE_SHIFT = "46.3%"; // how far side slides move
-const SIDE_LIFT = "-3.8%"; // side slides sit slightly higher than the center one
-
-const arrowButtonClass =
-  "text-black hover:text-gray-500 transition-colors focus:outline-none disabled:opacity-30 disabled:text-gray-300 disabled:hover:text-gray-300 disabled:cursor-not-allowed";
-
 const SpeakerSection = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const next = () => {
-    if (SPEAKERS_TBA) return;
-    setCurrentIndex((prev) => (prev === data.length - 1 ? 0 : prev + 1));
-  };
-
-  const prev = () => {
-    if (SPEAKERS_TBA) return;
-    setCurrentIndex((prev) => (prev === 0 ? data.length - 1 : prev - 1));
-  };
-
-  const getSlideStyle = (index: number): React.CSSProperties => {
-    const total = data.length;
-    const offset = (index - currentIndex + total) % total;
-
-    if (offset === 0) {
-      return {
-        transform: "translate(0, 0) scale(1)",
-        opacity: 1,
-        zIndex: 30,
-      };
-    }
-    if (offset === 1) {
-      return {
-        transform: `translate(${SIDE_SHIFT}, ${SIDE_LIFT}) scale(0.9)`,
-        opacity: 0.5,
-        zIndex: 20,
-      };
-    }
-    if (offset === total - 1) {
-      return {
-        transform: `translate(-${SIDE_SHIFT}, ${SIDE_LIFT}) scale(0.9)`,
-        opacity: 0.5,
-        zIndex: 20,
-      };
-    }
-    return {
-      transform: `translate(0, ${SIDE_LIFT}) scale(0.75)`,
-      opacity: 0,
-      zIndex: 10,
-      pointerEvents: "none",
-    };
-  };
-
   return (
-    <section
+    <LeafCarousel
       id="speakers"
-      className="relative flex min-h-[100svh] w-full items-center justify-center bg-[#e1edf5] overflow-hidden border-t-5 border-white"
-    >
-      <div
-        className="relative shrink-0"
-        style={{
-          width: "min(100%, calc(100svh * 1440 / 1081))",
-          aspectRatio: "1440 / 1081",
-          containerType: "inline-size",
-        }}
-      >
-        {/* Title */}
-        <h2
-          className="absolute z-20 -translate-x-1/2 whitespace-nowrap leading-none text-black"
-          style={{
-            left: "50%",
-            top: "20.1%",
-            fontSize: "5.35cqw",
-            fontFamily: "'Mochiy Pop One', sans-serif",
-          }}
-        >
-          SPEAKERS
-        </h2>
-
-        {/* Slides */}
-        {speakerData.map((item, index) => (
-          <div
-            key={item.name}
-            className="absolute transition-all duration-500 ease-in-out"
+      title="SPEAKERS"
+      items={data}
+      getKey={(item) => item.name}
+      firstLeaf="ant"
+      itemLabel="Speaker"
+      cardWidth="41.5%"
+      disabled={SPEAKERS_TBA}
+      cardStyle={
+        SPEAKERS_TBA
+          ? { alignItems: "center", justifyContent: "center" }
+          : undefined
+      }
+      renderCard={(item) =>
+        SPEAKERS_TBA ? (
+          <h3
+            className="text-black leading-tight"
             style={{
-              left: "12.22%",
-              top: "10.4%",
-              width: "71.94%",
-              ...getSlideStyle(index),
+              fontSize: "2.2cqw",
+              fontFamily: "'Mochiy Pop One', sans-serif",
+              fontWeight: 400,
+              padding: "1.6cqw 0",
             }}
           >
-            <Image
-              src={index % 2 === 1 ? leafLadybug : leafAnt}
-              alt=""
-              className="w-full h-auto pointer-events-none"
-              priority={index < 2}
-            />
-
-            {/* White card */}
-            <div
-              className="absolute flex flex-col bg-white/80 backdrop-blur-sm shadow-lg border border-white/50"
+            TBA
+          </h3>
+        ) : (
+          <>
+            <div className="flex items-center" style={{ gap: "1.2cqw" }}>
+              {item.img && (
+                <Image
+                  src={item.img}
+                  alt={item.name}
+                  width={128}
+                  height={128}
+                  className="shrink-0 rounded-full object-cover"
+                  style={{ width: "4.5cqw", height: "4.5cqw" }}
+                />
+              )}
+              <h3
+                className="text-black leading-tight"
+                style={{
+                  fontSize: "2.2cqw",
+                  fontFamily: "'Mochiy Pop One', sans-serif",
+                  fontWeight: 400,
+                }}
+              >
+                {item.name}
+              </h3>
+            </div>
+            <p
+              className="custom-scrollbar overflow-y-auto text-black font-medium"
               style={{
-                left: "57.5%",
-                top: "52.7%",
-                width: "41.5%",
-                transform: "translate(-50%, -50%)",
-                padding: "2.4cqw 2.6cqw",
-                borderRadius: "2cqw",
-                gap: "0.6cqw",
-                ...(SPEAKERS_TBA && {
-                  alignItems: "center",
-                  justifyContent: "center",
-                }),
+                fontSize: "1.32cqw",
+                lineHeight: 1.35,
+                maxHeight: "7.4cqw",
+                paddingRight: "0.6cqw",
               }}
             >
-              {SPEAKERS_TBA ? (
-                <h3
-                  className="text-black leading-tight"
-                  style={{
-                    fontSize: "2.2cqw",
-                    fontFamily: "'Mochiy Pop One', sans-serif",
-                    fontWeight: 400,
-                    padding: "1.6cqw 0",
-                  }}
-                >
-                  TBA
-                </h3>
-              ) : (
-                <>
-                  <div className="flex items-center" style={{ gap: "1.2cqw" }}>
-                    {item.img && (
-                      <Image
-                        src={item.img}
-                        alt={item.name}
-                        width={128}
-                        height={128}
-                        className="shrink-0 rounded-full object-cover"
-                        style={{ width: "4.5cqw", height: "4.5cqw" }}
-                      />
-                    )}
-                    <h3
-                      className="text-black leading-tight"
-                      style={{
-                        fontSize: "2.2cqw",
-                        fontFamily: "'Mochiy Pop One', sans-serif",
-                        fontWeight: 400,
-                      }}
-                    >
-                      {item.name}
-                    </h3>
-                  </div>
-                  {/* Bios are long, so the text scrolls inside the card */}
-                  <p
-                    className="custom-scrollbar overflow-y-auto text-black font-medium"
-                    style={{
-                      fontSize: "1.32cqw",
-                      lineHeight: 1.35,
-                      maxHeight: "7.4cqw",
-                      paddingRight: "0.6cqw",
-                    }}
-                  >
-                    {item.description}
-                  </p>
-                </>
-              )}
-            </div>
-          </div>
-        ))}
-
-        {/* Arrows */}
-        <div
-          className="absolute z-40 flex -translate-x-1/2 -translate-y-1/2"
-          style={{ left: "50%", top: "81.3%", gap: "1.9cqw" }}
-        >
-          <button
-            onClick={prev}
-            className={arrowButtonClass}
-            style={{ padding: "0.6cqw" }}
-            aria-label="Previous Speaker"
-            disabled={SPEAKERS_TBA}
-          >
-            <ArrowLeft
-              strokeWidth={3}
-              style={{ width: "3.05cqw", height: "3.05cqw" }}
-            />
-          </button>
-          <button
-            onClick={next}
-            className={arrowButtonClass}
-            style={{ padding: "0.6cqw" }}
-            aria-label="Next Speaker"
-            disabled={SPEAKERS_TBA}
-          >
-            <ArrowRight
-              strokeWidth={3}
-              style={{ width: "3.05cqw", height: "3.05cqw" }}
-            />
-          </button>
-        </div>
-      </div>
-    </section>
+              {item.description}
+            </p>
+          </>
+        )
+      }
+    />
   );
 };
 
