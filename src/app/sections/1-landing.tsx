@@ -56,7 +56,12 @@ const LandingSection = () => {
         {/* Logo */}
         <div
           className="absolute z-10"
-          style={{ left: "16.875%", top: "35.25%", width: "66.18%" }}
+          style={{
+            left: "16.875%",
+            top: "35.25%",
+            width: "66.18%",
+            transform: "scale(1.2)",
+          }}
         >
           {/* Glowing backdrop */}
           <div
@@ -104,9 +109,9 @@ const LandingSection = () => {
         <p
           className="absolute z-20 text-gray-900 whitespace-nowrap leading-none"
           style={{
-            left: "23.9%",
-            top: "63.5%",
-            fontSize: "1.806cqw",
+            left: "20%",
+            top: "66%",
+            fontSize: "24px",
             fontFamily: "'Mochiy Pop One', sans-serif",
           }}
         >
@@ -118,7 +123,7 @@ const LandingSection = () => {
           className="absolute z-20 flex flex-col items-center justify-center bg-[#dcf0a2]/70 rounded-sm backdrop-blur-md shadow-sm border border-[#9cc044]/30"
           style={{
             left: "63.82%",
-            top: "62.5%",
+            top: "64%",
             width: "13.26%",
             padding: "0.8cqw 0",
           }}
@@ -143,7 +148,7 @@ const LandingSection = () => {
                     </div>
                     <div
                       className="flex w-full justify-between px-[8%] font-bold text-gray-600 mt-1"
-                      style={{ fontSize: "0.9cqw" }}
+                      style={{ fontSize: "1.5cqw" }}
                     >
                       <span>D</span>
                       <span>H</span>
