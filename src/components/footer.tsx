@@ -1,10 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { Instagram, Linkedin, Mail } from "lucide-react";
-import flowerPink from "@/images/home_flower1.png";
-import flowerOrange from "@/images/home_flower2.png";
 
 const Footer = () => {
   return (
