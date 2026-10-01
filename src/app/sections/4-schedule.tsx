@@ -75,7 +75,7 @@ const ScheduleSection = () => {
           SCHEDULE
         </h2>
 
-        {/* Previous arrow - centred ~83px left of the card */}
+        {/* Previous arrow */}
         <button
           onClick={goToPrevious}
           className={arrowClass}
