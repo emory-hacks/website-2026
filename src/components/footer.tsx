@@ -9,7 +9,7 @@ import flowerOrange from "@/images/home_flower2.png";
 const Footer = () => {
   return (
     <footer
-      className="relative w-full bg-[#d7edfa] overflow-hidden border-t-5 border-white"
+      className="relative w-full bg-[#e1edf5] overflow-hidden"
       style={{ aspectRatio: "1440 / 493", containerType: "inline-size" }}
     >
       {/* Flower 2 */}
