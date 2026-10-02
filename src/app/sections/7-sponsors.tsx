@@ -21,10 +21,19 @@ interface Sponsor {
 
 // One entry per sponsor. Lead sponsors show first, on their own row.
 const SPONSORS: Sponsor[] = [
-  { name: "Coder", logo: coderLogo, tier: "lead" },
-  { name: "typesense", logo: typesenseLogo },
-  { name: "OpenMajors", logo: openmajorsLogo },
-  { name: "Emory NLP", logo: emoryNlpLogo, tier: "community" },
+  { name: "Coder", logo: coderLogo, tier: "lead", url: "https://coder.com/" },
+  { name: "typesense", logo: typesenseLogo, url: "https://typesense.org/" },
+  {
+    name: "OpenMajors",
+    logo: openmajorsLogo,
+    url: "https://www.openmajors.com/",
+  },
+  {
+    name: "Emory NLP",
+    logo: emoryNlpLogo,
+    tier: "community",
+    url: "https://emorynlp.org/",
+  },
 ];
 
 // Each logo floats on its own soft cloud instead of sitting in a box
