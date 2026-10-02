@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 // Tiny glowing white dots drifting and twinkling over the sky, spread down
 // the whole page. Positions are random per visit, so they're made after
 // mount (rendering them on the server would mismatch).
+// fewer on phones, where every animated element costs more
 const PER_SCREEN = 14;
+const PER_SCREEN_PHONE = 6;
 
 interface Dot {
   left: number; // % across
@@ -22,7 +24,10 @@ const Sparkles = () => {
   useEffect(() => {
     const make = () => {
       const height = document.body.scrollHeight;
-      const count = Math.round((height / window.innerHeight) * PER_SCREEN);
+      const perScreen = window.matchMedia("(pointer: coarse)").matches
+        ? PER_SCREEN_PHONE
+        : PER_SCREEN;
+      const count = Math.round((height / window.innerHeight) * perScreen);
       setDots(
         Array.from({ length: count }, () => ({
           left: Math.random() * 100,
@@ -65,11 +70,14 @@ const Sparkles = () => {
           }}
         >
           <span
-            className="animate-sparkle block rounded-full bg-white"
+            className="animate-sparkle block rounded-full"
             style={{
-              width: d.size,
-              height: d.size,
-              boxShadow: `0 0 ${d.size * 2}px ${d.size * 0.8}px rgb(255 255 255 / 0.7)`,
+              // the dot and its glow in one gradient (cheaper than box-shadow)
+              width: d.size * 4,
+              height: d.size * 4,
+              margin: -d.size * 1.5,
+              background:
+                "radial-gradient(closest-side, #fff 0%, #fff 22%, rgb(255 255 255 / 0.55) 40%, rgb(255 255 255 / 0) 100%)",
               animationDuration: `${d.twinkle}s`,
               animationDelay: `${d.delay}s`,
             }}

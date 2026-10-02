@@ -40,12 +40,14 @@ const CloudTier = ({
   tier,
   screens,
   scrollY,
+  parallax,
 }: {
   tier: number;
   screens: number;
   scrollY: MotionValue<number>;
+  parallax: boolean;
 }) => {
-  const y = useTransform(scrollY, (v) => v * TIERS[tier].lag);
+  const y = useTransform(scrollY, (v) => (parallax ? v * TIERS[tier].lag : 0));
 
   return (
     <motion.div className="absolute inset-0" style={{ y }}>
@@ -92,6 +94,12 @@ const CloudTier = ({
 const Clouds = () => {
   const [screens, setScreens] = useState(1);
   const { scrollY } = useScroll();
+  // Scroll parallax moves page-tall layers every frame, which phones struggle
+  // with; touch devices keep the gentle drift but skip the parallax
+  const [parallax, setParallax] = useState(false);
+  useEffect(() => {
+    setParallax(!window.matchMedia("(pointer: coarse)").matches);
+  }, []);
 
   useEffect(() => {
     const update = () =>
@@ -113,7 +121,13 @@ const Clouds = () => {
       transition={{ duration: 1.5, ease: "easeOut" }}
     >
       {TIERS.map((_, tier) => (
-        <CloudTier key={tier} tier={tier} screens={screens} scrollY={scrollY} />
+        <CloudTier
+          key={tier}
+          tier={tier}
+          screens={screens}
+          scrollY={scrollY}
+          parallax={parallax}
+        />
       ))}
     </motion.div>
   );
