@@ -6,8 +6,6 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -112,23 +110,39 @@
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
-@theme {
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
-  --font-display: var(--font-display);
-}
-
 @layer base {
   * {
-    @apply border-border outline-ring/50 font-sans;
+    @apply border-border outline-ring/50;
+    font-family: var(--font-brand), sans-serif;
+    /* The brand font has a single weight; a same-color outline bolds it */
+    -webkit-text-stroke: 0.03em currentColor;
   }
 
+  /* What shows when you bounce past the page edges. A plain colour (not a
+     fixed gradient, which forces a repaint every scroll frame); OverscrollColor
+     swaps it to the bottom colour once you're in the lower half of the page. */
+  html {
+    background-color: #dcecf7;
+  }
+
+  html.overscroll-bottom {
+    background-color: #729cdb;
+  }
+
+  /* One gradient for the whole page: sections stay transparent so new ones
+     blend in. #aacaf2 lands at the bottom of the first screen (the hero). */
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background: linear-gradient(
+      to bottom,
+      #dcecf7 0,
+      #aacaf2 100svh,
+      #729cdb 100%
+    );
   }
 
   h1 {
-    @apply scroll-m-20 text-4xl font-bold tracking-tight text-balance font-display;
+    @apply scroll-m-20 text-4xl font-bold tracking-tight text-balance;
   }
 
   h2 {
@@ -154,4 +168,173 @@
   a {
     @apply cursor-pointer;
   }
+}
+
+/* Idle animations: transform-only so they stay on the GPU */
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+  50% {
+    transform: translateY(-12%) rotate(3deg);
+  }
+}
+
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(-1.2deg);
+  }
+  50% {
+    transform: rotate(1.2deg);
+  }
+}
+
+@keyframes drift {
+  from {
+    transform: translateX(-2vw);
+  }
+  to {
+    transform: translateX(2vw);
+  }
+}
+
+.animate-bob {
+  animation: bob 3.2s ease-in-out infinite;
+}
+
+.animate-sway {
+  animation: sway 7s ease-in-out infinite;
+}
+
+.animate-drift {
+  animation: drift 24s ease-in-out infinite alternate;
+}
+
+/* Tracks: bugs waddle as they walk the vine */
+@keyframes waddle {
+  0%,
+  100% {
+    transform: rotate(-4deg) translateY(0);
+  }
+  50% {
+    transform: rotate(4deg) translateY(-5%);
+  }
+}
+
+.animate-waddle {
+  animation: waddle 0.7s ease-in-out infinite;
+}
+
+/* Background sparkles: drift in a small loop and flicker */
+@keyframes sparkle {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(0.7);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  55% {
+    opacity: 0.85;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes sparkle-float {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(10px, -14px);
+  }
+  66% {
+    transform: translate(-8px, -6px);
+  }
+}
+
+.animate-sparkle {
+  animation: sparkle 3s ease-in-out infinite;
+}
+
+.animate-sparkle-float {
+  animation: sparkle-float 9s ease-in-out infinite;
+}
+
+/* Gentle up-and-down bob for things floating on the sky */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float {
+  animation: float 4.5s ease-in-out infinite;
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(-5deg);
+  }
+  75% {
+    transform: rotate(4deg);
+  }
+}
+
+.hover-wiggle:hover {
+  animation: wiggle 0.45s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-bob,
+  .animate-sway,
+  .animate-drift,
+  .animate-float,
+  .animate-waddle,
+  .animate-sparkle,
+  .animate-sparkle-float,
+  .hover-wiggle:hover {
+    animation: none;
+  }
+}
+
+/* Longer text people read (paragraphs, descriptions, answers). No faux-bold
+   outline: the reading font has real weights. */
+.font-read {
+  font-family: var(--font-read), sans-serif;
+  font-weight: 300;
+  -webkit-text-stroke: 0;
+}
+
+/* Every section heading (desktop and phone) */
+.section-title {
+  /* coral, same as the "apply now!" button */
+  /* color: #f26c4f; */
+  color: #eb4d26;
+  /* a soft shadow lifts headings off the sky */
+  text-shadow: 0 2px 10px rgb(74 42 20 / 0.18);
+  /* thinner outline than the site-wide 0.03em faux bold */
+  -webkit-text-stroke-width: 0.01em;
+  letter-spacing: 0.12em;
+  /* letter-spacing also trails the last letter; balance it so headings stay centred */
+  padding-left: 0.12em;
+}
+
+/* Section headings in the stacked phone layouts */
+.section-title-mobile {
+  font-size: clamp(44px, 13vw, 72px);
+  line-height: 1;
+  white-space: nowrap;
 }

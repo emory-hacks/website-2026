@@ -1,37 +1,25 @@
-import {
-  Funnel_Display,
-  Inconsolata,
-  DM_Sans,
-  Mochiy_Pop_One,
-} from "next/font/google";
+import localFont from "next/font/local";
 
-const mochiy = Mochiy_Pop_One({
-  variable: "--font-mochiy",
-  weight: "400",
-  subsets: ["latin"],
+// Site-wide brand font; everything reads it through var(--font-brand).
+// size-adjust scales the glyphs since LazyDog renders small for its font-size.
+export const brandFont = localFont({
+  src: "../fonts/LazyDog.ttf",
+  declarations: [{ prop: "size-adjust", value: "115%" }],
 });
 
-const sans = DM_Sans({
-  variable: "--font-sans",
-  weight: "variable",
-  subsets: ["latin"],
+// Reading font for longer text (paragraphs, descriptions, answers); used via
+// the .font-read class. Paths keep the original file names (license terms).
+export const readingFont = localFont({
+  src: [
+    {
+      path: "../fonts/simply_rounded/Simply Rounded-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../fonts/simply_rounded/Simply Rounded-Italic.woff2",
+      weight: "400",
+      style: "italic",
+    },
+  ],
 });
-
-const mono = Inconsolata({
-  variable: "--font-mono",
-  weight: "variable",
-  subsets: ["latin"],
-});
-
-const display = Funnel_Display({
-  variable: "--font-display",
-  weight: "variable",
-  subsets: ["latin"],
-});
-
-export const fonts = {
-  sans,
-  mono,
-  display,
-  mochiy,
-};

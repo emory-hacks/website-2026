@@ -1,10 +1,10 @@
 "use client";
 
+import { motion } from "motion/react";
+import { reveal } from "@/components/scroll-motion";
+
 import { useState } from "react";
-import Image from "next/image";
 import { ChevronDown } from "lucide-react";
-import flower3 from "@/images/about_flower3.png";
-import flower2 from "@/images/about_flower2.png";
 import faqData from "@/lib/faq.json";
 
 const FaqSection = () => {
@@ -17,141 +17,63 @@ const FaqSection = () => {
   return (
     <section
       id="qna"
-      className="relative flex min-h-[100svh] w-full items-center justify-center bg-[#d7edfa] overflow-hidden border-t-5 border-white"
+      className="relative flex w-full flex-col items-center overflow-x-clip px-5 py-20 landscape:min-h-[100svh] landscape:py-28"
     >
-      <div
-        className="relative shrink-0"
-        style={{
-          width: "min(100%, calc(100svh * 1440 / 1200))",
-          aspectRatio: "1440 / 1200",
-          containerType: "inline-size",
-        }}
+      <motion.h2
+        {...reveal()}
+        className="section-title section-title-mobile relative z-20 landscape:text-[clamp(44px,5.35vw,64px)]"
       >
-        {/* Flower 3 */}
-        <div
-          className="pointer-events-none absolute z-0"
-          style={{
-            left: "15.81%",
-            top: "43.39%",
-            width: "16.18%",
-            aspectRatio: "233 / 540",
-            transform: "rotate(-17.69deg) scaleX(-1)",
-          }}
-        >
-          <Image
-            src={flower3}
-            alt=""
-            fill
-            sizes="20vw"
-            className="object-contain"
-          />
-        </div>
+        faq
+      </motion.h2>
 
-        {/* Flower 2 */}
-        <div
-          className="pointer-events-none absolute z-0"
-          style={{
-            left: "75.4%",
-            top: "66.32%",
-            width: "7.71%",
-            aspectRatio: "111 / 301",
-            transform: "rotate(22.65deg)",
-          }}
-        >
-          <Image
-            src={flower2}
-            alt=""
-            fill
-            sizes="10vw"
-            className="object-contain"
-          />
-        </div>
-
-        {/* Title */}
-        <h2
-          className="absolute z-20 -translate-x-1/2 whitespace-nowrap leading-none text-black"
-          style={{
-            left: "50%",
-            top: "16.75%",
-            fontSize: "5.35cqw",
-            fontFamily: "'Mochiy Pop One', sans-serif",
-          }}
-        >
-          Q&A
-        </h2>
-
-        {/* Card */}
-        <div
-          className="absolute z-10 bg-white/80 backdrop-blur-md shadow-xl border border-white/40 overflow-y-auto custom-scrollbar"
-          style={{
-            left: "23.89%",
-            top: "27.5%",
-            width: "52.22%",
-            height: "61%",
-            borderRadius: "2.78cqw",
-            padding: "5.2cqw 4.4cqw",
-          }}
-        >
-          <div className="flex flex-col w-full">
-            {faqData.map((faq, index) => (
-              <div
-                key={index}
-                className={`flex flex-col border-b-2 border-black/10 ${
-                  index === faqData.length - 1 ? "border-b-0" : ""
-                }`}
-                style={{ padding: "1.84cqw 0" }}
-              >
-                {/* Question Trigger */}
-                <button
-                  onClick={() => toggleFaq(index)}
-                  className="flex justify-between items-center w-full text-left focus:outline-none group"
-                  style={{ gap: "1cqw" }}
-                >
-                  <h3
-                    className="text-gray-900 group-hover:text-gray-600 transition-colors"
-                    style={{
-                      fontSize: "18px",
-                      lineHeight: 1.3,
-                      fontFamily: "'Mochiy Pop One', sans-serif",
-                      fontWeight: 400,
-                    }}
-                  >
-                    {faq.question}
-                  </h3>
-                  <ChevronDown
-                    className={`shrink-0 text-gray-500 transition-transform duration-300 ${
-                      openIndex === index ? "rotate-180" : "rotate-0"
-                    }`}
-                    style={{ width: "1.5cqw", height: "1.5cqw" }}
-                  />
-                </button>
-
-                {/* Answer Dropdown */}
+      <div className="relative mt-8 w-full max-w-3xl">
+        <motion.div {...reveal(0.15, 60)} className="relative z-10">
+          <div className="relative flex flex-col">
+            {faqData.map((faq, index) => {
+              const open = openIndex === index;
+              return (
                 <div
-                  className={`grid transition-all duration-300 ease-in-out ${
-                    openIndex === index
-                      ? "grid-rows-[1fr] opacity-100"
-                      : "grid-rows-[0fr] opacity-0"
+                  key={index}
+                  className={`py-4 md:py-5 ${
+                    index === faqData.length - 1
+                      ? ""
+                      : "border-b-2 border-dashed border-[#4a2a14]/60"
                   }`}
-                  style={{ marginTop: openIndex === index ? "0.8cqw" : 0 }}
                 >
-                  <div className="overflow-hidden">
-                    <p
-                      className="text-gray-700 font-medium"
-                      style={{
-                        fontSize: "14px",
-                        lineHeight: 1.5,
-                        paddingRight: "2cqw",
-                      }}
-                    >
-                      {faq.answer}
-                    </p>
+                  <button
+                    onClick={() => toggleFaq(index)}
+                    aria-expanded={open}
+                    className="group flex w-full items-center justify-between gap-4 text-left focus:outline-none"
+                  >
+                    <h3 className="text-[20px] leading-snug tracking-[1.5px] text-[#4a2a14] transition-colors group-hover:text-[#f26c4f] md:text-[26px]">
+                      {faq.question}
+                    </h3>
+                    <ChevronDown
+                      className={`size-5 shrink-0 text-[#4a2a14] transition-transform duration-300 md:size-6 ${
+                        open ? "rotate-180" : ""
+                      }`}
+                      strokeWidth={2.5}
+                    />
+                  </button>
+
+                  <div
+                    className={`grid transition-all duration-300 ease-in-out ${
+                      open
+                        ? "mt-2 grid-rows-[1fr] opacity-100"
+                        : "grid-rows-[0fr] opacity-0"
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <p className="font-read pr-6 text-[16px] leading-relaxed tracking-wide text-[#4a2a14]/85 md:text-[19px]">
+                        {faq.answer}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

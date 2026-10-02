@@ -1,179 +1,196 @@
 "use client";
 
-import { useState } from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useRef, useState } from "react";
+import { AnimatePresence, motion, useInView } from "motion/react";
+import { reveal } from "@/components/scroll-motion";
 import scheduleData from "@/lib/schedule.json";
+import SkyGlow from "@/components/sky-glow";
+import { Blossom, Leaf } from "@/components/garden";
 
-const SCHEDULE_TBA = true;
+const SCHEDULE_TBA = false;
 
-const DAY_DATES: Record<string, string> = {
-  Friday: "11/13",
-  Saturday: "11/14",
-  Sunday: "11/15",
+const DAYS: Record<string, { short: string; date: string }> = {
+  Friday: { short: "fri", date: "11/13" },
+  Saturday: { short: "sat", date: "11/14" },
+  Sunday: { short: "sun", date: "11/15" },
 };
 
-const ROW_PX = 25;
-const BLOCK_PX = 355;
-const DESIGN_PX_PER_CQW = 14.4;
-const getRowGap = (count: number) => {
-  if (count <= 1) return "0cqw";
-  const px = Math.max(
-    8,
-    Math.min(41, (BLOCK_PX - count * ROW_PX) / (count - 1)),
-  );
-  return `${(px / DESIGN_PX_PER_CQW).toFixed(3)}cqw`;
-};
+// Seconds per row: the vine grows one row per step as bullets pop in
+const ROW_STEP = 0.12;
+
+// Shared by the visible rows and the invisible height-reserving copies
+const ROW_CLASS =
+  "grid grid-cols-[6.5rem_1.75rem_1fr] items-center gap-x-3 py-3 md:grid-cols-[11rem_2.25rem_1fr] md:gap-x-5 md:py-4";
+const TIME_CLASS =
+  "text-right text-[18px] tracking-wide text-[#e46f4f] md:text-[26px]";
+const EVENT_CLASS =
+  "text-[20px] leading-snug tracking-wide text-[#4a2a14] md:text-[29px]";
 
 const formatTime = (time: string) => time.replace(/^0/, "");
-
-const arrowClass =
-  "absolute z-20 -translate-x-1/2 -translate-y-1/2 text-black hover:text-gray-500 transition-colors focus:outline-none disabled:opacity-30 disabled:text-gray-300 disabled:hover:text-gray-300 disabled:cursor-not-allowed";
 
 const ScheduleSection = () => {
   const [dayIndex, setDayIndex] = useState(0);
   const activeDay = scheduleData[dayIndex];
-  const dayDate = DAY_DATES[activeDay.day];
 
-  const isFirstDay = dayIndex === 0;
-  const isLastDay = dayIndex === scheduleData.length - 1;
-
-  const goToPrevious = () => {
-    if (!isFirstDay) {
-      setDayIndex((prev) => prev - 1);
-    }
-  };
-
-  const goToNext = () => {
-    if (!isLastDay) {
-      setDayIndex((prev) => prev + 1);
-    }
-  };
+  // Hold the vine animation until the timeline scrolls into view
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(timelineRef, { once: true, amount: 0.2 });
 
   return (
     <section
       id="schedule"
-      className="relative flex min-h-[100svh] w-full items-center justify-center bg-[#d7edfa] overflow-hidden border-t-5 border-white"
+      className="relative flex w-full flex-col items-center overflow-x-clip px-5 py-20 landscape:min-h-[100svh] landscape:py-28"
     >
-      <div
-        className="relative shrink-0"
-        style={{
-          width: "min(100%, calc(100svh * 1440 / 1081))",
-          aspectRatio: "1440 / 1081",
-          containerType: "inline-size",
-        }}
+      <motion.h2
+        {...reveal()}
+        className="section-title section-title-mobile relative z-20 landscape:text-[clamp(44px,5.35vw,64px)]"
       >
-        {/* Title */}
-        <h2
-          className="absolute z-20 -translate-x-1/2 whitespace-nowrap leading-none text-neutral-900"
-          style={{
-            left: "50%",
-            top: "20%",
-            fontSize: "5.35cqw",
-            fontFamily: "'Mochiy Pop One', sans-serif",
-          }}
-        >
-          SCHEDULE
-        </h2>
+        schedule
+      </motion.h2>
 
-        {/* Previous arrow */}
-        <button
-          onClick={goToPrevious}
-          className={arrowClass}
-          style={{ left: "26.53%", top: "56%", padding: "0.55cqw" }}
-          aria-label="Previous day"
-          disabled={isFirstDay}
-        >
-          <ArrowLeft
-            strokeWidth={3}
-            style={{ width: "2.78cqw", height: "2.78cqw" }}
-          />
-        </button>
-
-        {/* Card */}
-        <div
-          className="absolute z-10 flex flex-col bg-white shadow-sm"
-          style={{
-            left: "32.29%",
-            top: "35.06%",
-            width: "35.35%",
-            minHeight: "41.9%",
-            borderRadius: "1.39cqw",
-            gap: "1.39cqw",
-            padding: "1.39cqw 2.78cqw",
-          }}
-        >
-          {/* Date */}
-          <p
-            className="text-neutral-900"
-            style={{
-              fontFamily: "'Mochiy Pop One', sans-serif",
-              fontWeight: 400,
-              fontSize: "1.806cqw",
-              lineHeight: 1,
-              letterSpacing: 0,
-            }}
-          >
-            {dayDate ? `${dayDate} (${activeDay.day})` : activeDay.day}
-          </p>
-
-          {SCHEDULE_TBA ? (
-            <div className="flex flex-1 items-center justify-center">
-              <p
-                className="text-neutral-400"
-                style={{
-                  fontFamily: "'Mochiy Pop One', sans-serif",
-                  fontWeight: 400,
-                  fontSize: "2.78cqw",
-                }}
-              >
-                TBA
-              </p>
-            </div>
-          ) : (
-            /* Times & events + vertical line */
-            <div
-              className="flex flex-col border-l border-black"
-              style={{
-                width: "27.6cqw",
-                gap: getRowGap(activeDay.events.length),
-                padding: "0 2.78cqw",
-                marginLeft: "2.78cqw",
-              }}
+      {/* Day tabs */}
+      <motion.div
+        {...reveal(0.1, 20)}
+        className="relative z-20 mt-8 flex gap-2 md:gap-4"
+        role="tablist"
+      >
+        {scheduleData.map(({ day }, i) => {
+          const active = i === dayIndex;
+          return (
+            <button
+              key={day}
+              role="tab"
+              aria-selected={active}
+              onClick={() => setDayIndex(i)}
+              className={`relative rounded-full px-4 py-2 text-[19px] tracking-wide transition-colors md:px-6 md:text-[26px] ${
+                active
+                  ? "text-[#e46f4f]"
+                  : "text-[#4a2a14] hover:text-[#4a2a14]/50"
+              }`}
             >
-              {activeDay.events.map((event, i) => (
-                <div
-                  key={`${activeDay.day}-${i}-${event.time}`}
-                  className="grid items-center"
-                  style={{
-                    gridTemplateColumns: "11.1cqw 1fr",
-                    fontSize: "1.39cqw",
-                    lineHeight: 1.25,
+              {active && (
+                <motion.span
+                  layoutId="schedule-day"
+                  className="absolute inset-0"
+                  transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                />
+              )}
+              <span className="relative">
+                {DAYS[day]?.short ?? day} {DAYS[day]?.date}
+              </span>
+            </button>
+          );
+        })}
+      </motion.div>
+
+      {/* Timeline */}
+      <motion.div
+        {...reveal(0.2, 40)}
+        className="relative mt-10 w-full max-w-3xl"
+      >
+        <SkyGlow opacity={0.35} />
+
+        {SCHEDULE_TBA ? (
+          <p className="relative py-16 text-center text-[36px] text-[#4a2a14]/50">
+            tba
+          </p>
+        ) : (
+          <div ref={timelineRef} className="relative grid">
+            {/* Every day's list sits invisibly in the same grid cell, so the
+                timeline is always as tall as the longest day: switching days
+                never changes the page height (which would shift everything
+                below, including the bee trail) */}
+            {scheduleData.map((day) => (
+              <ol
+                key={day.day}
+                className="invisible col-start-1 row-start-1"
+                aria-hidden
+              >
+                {day.events.map((event, i) => (
+                  <li key={i} className={ROW_CLASS}>
+                    <span className={TIME_CLASS}>{formatTime(event.time)}</span>
+                    <span className="size-7 md:size-9" />
+                    <span className={EVENT_CLASS}>{event.description}</span>
+                  </li>
+                ))}
+              </ol>
+            ))}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeDay.day}
+                className="relative col-start-1 row-start-1 self-start"
+                exit={{ opacity: 0, transition: { duration: 0.15 } }}
+              >
+                {/* The vine grows down; each row's bullet pops as it passes */}
+                <motion.div
+                  className="absolute bottom-3 top-3 w-[3px] origin-top rounded-full bg-[#8fbf4d] left-[calc(8.125rem-1.5px)] md:left-[calc(13.375rem-1.5px)]"
+                  initial={{ scaleY: 0 }}
+                  animate={{ scaleY: inView ? 1 : 0 }}
+                  transition={{
+                    duration: activeDay.events.length * ROW_STEP,
+                    ease: "linear",
+                  }}
+                  aria-hidden
+                />
+
+                <motion.ol
+                  initial="hidden"
+                  animate={inView ? "shown" : "hidden"}
+                  variants={{
+                    hidden: {},
+                    shown: {
+                      transition: {
+                        staggerChildren: ROW_STEP,
+                        delayChildren: ROW_STEP / 2,
+                      },
+                    },
                   }}
                 >
-                  <span className="font-semibold text-neutral-800">
-                    {formatTime(event.time)}
-                  </span>
-                  <span className="text-neutral-700">{event.description}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Next arrow */}
-        <button
-          onClick={goToNext}
-          className={arrowClass}
-          style={{ left: "73.4%", top: "56%", padding: "0.55cqw" }}
-          aria-label="Next day"
-          disabled={isLastDay}
-        >
-          <ArrowRight
-            strokeWidth={3}
-            style={{ width: "2.78cqw", height: "2.78cqw" }}
-          />
-        </button>
-      </div>
+                  {activeDay.events.map((event, i) => (
+                    <motion.li
+                      key={`${activeDay.day}-${i}`}
+                      variants={{
+                        hidden: { opacity: 0, x: -12 },
+                        shown: { opacity: 1, x: 0 },
+                      }}
+                      className={ROW_CLASS}
+                    >
+                      <span className={TIME_CLASS}>
+                        {formatTime(event.time)}
+                      </span>
+                      <motion.span
+                        className="relative flex justify-center"
+                        variants={{
+                          hidden: { scale: 0, rotate: -30 },
+                          shown: {
+                            scale: 1,
+                            rotate: 0,
+                            transition: {
+                              type: "spring",
+                              stiffness: 500,
+                              damping: 14,
+                            },
+                          },
+                        }}
+                      >
+                        {i % 2 === 0 ? (
+                          <Leaf
+                            flip={i % 4 === 2}
+                            className="size-7 md:size-9"
+                          />
+                        ) : (
+                          <Blossom className="size-7 md:size-9" />
+                        )}
+                      </motion.span>
+                      <span className={EVENT_CLASS}>{event.description}</span>
+                    </motion.li>
+                  ))}
+                </motion.ol>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        )}
+      </motion.div>
     </section>
   );
 };

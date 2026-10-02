@@ -1,12 +1,12 @@
-import { fonts } from "@/components/fonts";
+import { brandFont, readingFont } from "@/components/fonts";
 import Nav from "@/components/nav";
 import Footer from "@/components/footer";
+import Clouds from "@/components/clouds";
+import Sparkles from "@/components/sparkles";
+import OverscrollColor from "@/components/overscroll-color";
+import MotionProvider from "@/components/motion-provider";
 import type { Metadata } from "next";
 import "./globals.css";
-
-const fontVariables = Object.entries(fonts)
-  .map(([, v]) => v.variable)
-  .join(" ");
 
 const TITLE = "Emory Hacks" as const;
 const DESCRIPTION =
@@ -68,11 +68,22 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${fontVariables} font-sans antialiased bg-bg overflow-x-hidden`}
+        className="relative antialiased overflow-x-hidden"
+        style={
+          {
+            "--font-brand": brandFont.style.fontFamily,
+            "--font-read": readingFont.style.fontFamily,
+          } as React.CSSProperties
+        }
       >
-        <Nav />
-        {children}
-        <Footer />
+        <MotionProvider>
+          <OverscrollColor />
+          <Clouds />
+          <Sparkles />
+          <Nav />
+          {children}
+          <Footer />
+        </MotionProvider>
       </body>
     </html>
   );
