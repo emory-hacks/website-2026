@@ -5,7 +5,7 @@ import Countdown, { zeroPad } from "react-countdown";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "motion/react";
 import Enter from "@/components/enter";
-import logo from "@/images/logo_transparent.png";
+import logo from "@/images/logo.webp";
 import flowerPink from "@/images/rendered-flower2.webp";
 import flowerOrange from "@/images/rendered-flower.webp";
 import bee1 from "@/images/rendered-bee.webp"; // cropped version (bee only, no transparent padding)
@@ -153,29 +153,25 @@ const CountdownTimer = ({
   </div>
 );
 
-const LogoWithGlow = ({
-  glowBlur,
-  glowOpacity = 1,
-}: {
-  glowBlur: string;
-  glowOpacity?: number;
-}) => (
+// Cream glow behind the logo, drawn as a soft radial gradient (a blur filter
+// on a shape this big is expensive on phones)
+const LogoWithGlow = ({ glowOpacity = 1 }: { glowOpacity?: number }) => (
   <>
     <div
-      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-[100%] z-0"
+      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-0"
       style={{
-        width: "85%",
-        height: "80%",
-        background: "#fffbe3",
-        filter: `blur(${glowBlur})`,
+        width: "112%",
+        height: "125%",
+        background:
+          "radial-gradient(closest-side, #fffbe3 0%, #fffbe3 55%, rgb(255 251 227 / 0) 100%)",
         opacity: glowOpacity,
       }}
     ></div>
     <Image
       src={logo}
       alt="Emory Hacks Logo"
-      width={4718}
-      height={1487}
+      width={1900}
+      height={599}
       className="relative z-10 w-full h-auto object-contain"
       priority
     />
@@ -201,15 +197,9 @@ const OrangeFlower = () => (
   </Enter>
 );
 
-const Logo = ({
-  glowBlur,
-  glowOpacity,
-}: {
-  glowBlur: string;
-  glowOpacity?: number;
-}) => (
+const Logo = ({ glowOpacity }: { glowOpacity?: number }) => (
   <Enter from={{ scale: 0.6 }} delay={T.logo}>
-    <LogoWithGlow glowBlur={glowBlur} glowOpacity={glowOpacity} />
+    <LogoWithGlow glowOpacity={glowOpacity} />
   </Enter>
 );
 
@@ -296,7 +286,7 @@ const LandingSection = () => {
           }}
         >
           <motion.div style={{ y: centerY }}>
-            <Logo glowBlur="3.5cqw" />
+            <Logo />
           </motion.div>
         </div>
 
@@ -376,7 +366,7 @@ const LandingSection = () => {
           <DatePill className="[--u:2.6vw]" />
 
           <div className="w-[94vw]">
-            <Logo glowBlur="10vw" glowOpacity={0.55} />
+            <Logo glowOpacity={0.55} />
           </div>
 
           <CountdownTimer isMounted={isMounted} />

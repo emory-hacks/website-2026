@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion } from "motion/react";
 import bee from "@/images/rendered-bee.webp";
@@ -24,6 +24,10 @@ const ENTRANCE_DELAY = 1.5;
 const TRAIL_LENGTH = 280;
 // Opacity of each part of the visible tail, newest first
 const TAIL_FADE = [1, 0.6, 0.3];
+// Spacing (px along the trail) between the trail's dots
+const DOT_GAP = 10;
+const TAIL_DOTS = Math.ceil(TRAIL_LENGTH / DOT_GAP) + 1;
+const DOT_COLOR = "rgb(74 42 20 / 0.55)";
 
 // Loops aren't tied to scroll (half of a loop goes back up the page, which
 // looks like the bee reversing). Once the bee reaches one, it flies round it
@@ -80,16 +84,18 @@ interface Trail {
   // stretches of the trail (by length) the bee flies on its own
   loops: { start: number; end: number }[];
   // finished hearts stay visible (lengths along the trail)
-  hearts: { start: number; end: number }[];
+  hearts: { start: number; end: number; dots: Pt[] }[];
 }
 
 const BeeTrail = () => {
   const boxRef = useRef<HTMLDivElement>(null);
   const measureRef = useRef<SVGPathElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
-  const tailRefs = useRef<(SVGPathElement | null)[]>([]);
-  const heartRefs = useRef<(SVGPathElement | null)[]>([]);
-  const maskId = `bee-trail-${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
+  // The trail is drawn as a few dots near the bee (moved every frame) rather
+  // than as a page-tall path; repainting one of those every frame is slow on
+  // phones. Finished hearts are static dots that switch on once drawn.
+  const tailRefs = useRef<(SVGCircleElement | null)[]>([]);
+  const heartRefs = useRef<(SVGGElement | null)[]>([]);
   const beeRef = useRef<HTMLDivElement>(null);
   const [trail, setTrail] = useState<Trail | null>(null);
 
@@ -255,13 +261,28 @@ const BeeTrail = () => {
         end: lengthTo(end),
       }));
 
-      const hearts = heartAt.map(({ start, end }) => ({
+      const d = `M${pts[0].x} ${pts[0].y}${segs.join("")}`;
+      const heartLengths = heartAt.map(({ start, end }) => ({
         start: lengthTo(start),
         end: lengthTo(end),
       }));
+      // each heart's dots, at the same spacing the tail uses
+      measure.setAttribute("d", d);
+      const hearts = heartLengths.map(({ start, end }) => {
+        const dots: Pt[] = [];
+        for (
+          let l = Math.ceil(start / DOT_GAP) * DOT_GAP;
+          l <= end;
+          l += DOT_GAP
+        ) {
+          const p = measure.getPointAtLength(l);
+          dots.push({ x: p.x, y: p.y });
+        }
+        return { start, end, dots };
+      });
 
       setTrail({
-        d: `M${pts[0].x} ${pts[0].y}${segs.join("")}`,
+        d,
         width,
         height,
         anchors,
@@ -285,6 +306,22 @@ const BeeTrail = () => {
 
     const total = path.getTotalLength();
     const { anchors, loops } = trail;
+
+    // Asking the browser for a point on a page-long path is slow (it walks
+    // the whole path each time), so sample it once and interpolate after
+    const STEP = 4;
+    const samples = Array.from(
+      { length: Math.ceil(total / STEP) + 1 },
+      (_, i) => path.getPointAtLength(Math.min(i * STEP, total)),
+    );
+    const pointOn = (len: number) => {
+      const f = Math.min(Math.max(len, 0), total) / STEP;
+      const i = Math.min(Math.floor(f), samples.length - 2);
+      const t = f - i;
+      const a = samples[i];
+      const b = samples[i + 1];
+      return { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t };
+    };
     let current = -1;
     let target = 0;
     let frame = 0;
@@ -345,9 +382,9 @@ const BeeTrail = () => {
     const shortTurn = (d: number) => (((d % 360) + 540) % 360) - 180;
 
     const place = (len: number) => {
-      const p = path.getPointAtLength(len);
-      const q = path.getPointAtLength(Math.min(len + 2, total));
-      const back = path.getPointAtLength(Math.max(len - 2, 0));
+      const p = pointOn(len);
+      const q = pointOn(Math.min(len + 2, total));
+      const back = pointOn(Math.max(len - 2, 0));
       const dir =
         len + 2 <= total
           ? Math.atan2(q.y - p.y, q.x - p.x)
@@ -373,26 +410,41 @@ const BeeTrail = () => {
       beeEl.style.transform = `translate(${p.x}px, ${p.y}px) translate(-50%, -50%) rotate(${shownRot}deg) scale(${scale})`;
       const settled = Math.abs(shortTurn(goal - shownRot)) < 0.5;
 
-      // Reveal only the stretch of trail just behind the bee (the side it
-      // came from), split into fading pieces, plus any finished hearts
-      const show = (el: SVGPathElement | null, a: number, b: number) => {
-        if (!el) return;
-        const from = Math.max(0, Math.min(a, b));
-        const to = Math.min(total, Math.max(a, b));
-        el.style.strokeDasharray = `${Math.max(0, to - from)} ${total * 2 + 10}`;
-        el.style.strokeDashoffset = `${-from}`;
-      };
-      // the tail grows in as the bee leaves the hero
-      const piece = (TRAIL_LENGTH * mix) / TAIL_FADE.length;
-      TAIL_FADE.forEach((_, k) =>
-        show(
-          tailRefs.current[k],
-          len - heading * piece * k,
-          len - heading * piece * (k + 1),
-        ),
-      );
+      // Tail: dots on the stretch just behind the bee (the side it came
+      // from). They sit at fixed spots along the trail, so they stay put as
+      // the bee moves, and fade out toward the end. It grows in as the bee
+      // leaves the hero.
+      const reach = TRAIL_LENGTH * mix;
+      const first =
+        heading > 0
+          ? Math.floor(len / DOT_GAP) * DOT_GAP
+          : Math.ceil(len / DOT_GAP) * DOT_GAP;
+      tailRefs.current.forEach((dot, k) => {
+        if (!dot) return;
+        const at = first - heading * k * DOT_GAP;
+        const dist = Math.abs(len - at);
+        if (at < 0 || at > total || dist > reach) {
+          dot.setAttribute("opacity", "0");
+          return;
+        }
+        const pt = pointOn(at);
+        const fade =
+          TAIL_FADE[
+            Math.min(
+              TAIL_FADE.length - 1,
+              Math.floor((dist / TRAIL_LENGTH) * TAIL_FADE.length),
+            )
+          ];
+        dot.setAttribute("cx", `${pt.x}`);
+        dot.setAttribute("cy", `${pt.y}`);
+        dot.setAttribute("opacity", `${fade}`);
+      });
+      // finished hearts stay drawn
       trail.hearts.forEach((h, k) =>
-        show(heartRefs.current[k], h.start, len >= h.end ? h.end : h.start),
+        heartRefs.current[k]?.setAttribute(
+          "visibility",
+          len >= h.end ? "visible" : "hidden",
+        ),
       );
       return settled;
     };
@@ -460,51 +512,32 @@ const BeeTrail = () => {
         height={trail?.height ?? 0}
       >
         <path ref={measureRef} fill="none" stroke="none" />
-        {trail && (
-          <mask id={maskId} maskUnits="userSpaceOnUse">
-            {[
-              ...TAIL_FADE.map((o, k) => ({
-                o,
-                ref: (el: SVGPathElement | null) => {
-                  tailRefs.current[k] = el;
-                },
-                key: `t${k}`,
-              })),
-              ...trail.hearts.map((_, k) => ({
-                o: 1,
-                ref: (el: SVGPathElement | null) => {
-                  heartRefs.current[k] = el;
-                },
-                key: `h${k}`,
-              })),
-            ].map(({ o, ref, key }) => (
-              <path
-                key={key}
-                ref={ref}
-                d={trail.d}
-                fill="none"
-                stroke="white"
-                strokeOpacity={o}
-                strokeWidth={14}
-                strokeDasharray="0 1000000"
-              />
-            ))}
-          </mask>
-        )}
-        {trail && (
-          <path
-            mask={`url(#${maskId})`}
-            ref={pathRef}
-            d={trail.d}
-            fill="none"
-            stroke="#4a2a14"
-            strokeOpacity={0.55}
-            strokeWidth={3}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeDasharray="0 10"
+        {/* full trail: only used to measure positions along it, not drawn */}
+        {trail && <path ref={pathRef} d={trail.d} fill="none" stroke="none" />}
+        {Array.from({ length: TAIL_DOTS }, (_, k) => (
+          <circle
+            key={k}
+            ref={(el) => {
+              tailRefs.current[k] = el;
+            }}
+            r={1.5}
+            fill={DOT_COLOR}
+            opacity={0}
           />
-        )}
+        ))}
+        {trail?.hearts.map((h, k) => (
+          <g
+            key={k}
+            ref={(el) => {
+              heartRefs.current[k] = el;
+            }}
+            visibility="hidden"
+          >
+            {h.dots.map((p, j) => (
+              <circle key={j} cx={p.x} cy={p.y} r={1.5} fill={DOT_COLOR} />
+            ))}
+          </g>
+        ))}
       </svg>
 
       <div

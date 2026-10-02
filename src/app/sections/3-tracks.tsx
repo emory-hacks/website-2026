@@ -6,6 +6,7 @@ import {
   AnimatePresence,
   motion,
   useAnimationFrame,
+  useInView,
   useReducedMotion,
 } from "motion/react";
 import { reveal } from "@/components/scroll-motion";
@@ -86,13 +87,30 @@ const TracksSection = () => {
   const bugRefs = useRef<(HTMLDivElement | null)[]>([]);
   const elapsed = useRef(0);
   const reduceMotion = useReducedMotion();
+  const laneRef = useRef<HTMLDivElement>(null);
+  // only animate while the section is (nearly) on screen
+  const laneInView = useInView(laneRef, { margin: "200px" });
 
   // Walk each bug along the loop, evenly spaced, facing the way it's going
   useAnimationFrame((_, delta) => {
     const path = pathRef.current;
-    if (!path) return;
+    const lane = laneRef.current;
+    if (!path || !lane || !laneInView) return;
     if (!reduceMotion) elapsed.current += delta;
     const len = path.getTotalLength();
+
+    // Measure everything first, then move things, so the browser doesn't
+    // have to re-run layout between every bug
+    const laneRect = lane.getBoundingClientRect();
+    const sizes = data.map((_, i) => {
+      const el = bugRefs.current[i];
+      const bubble = el?.querySelector<HTMLElement>("[data-bug-bubble]");
+      return {
+        bugW: el?.offsetWidth ?? 0,
+        rx: (bubble?.offsetWidth ?? 0) / 2,
+        ry: (bubble?.offsetHeight ?? 0) / 2,
+      };
+    });
 
     data.forEach((_, i) => {
       const el = bugRefs.current[i];
@@ -110,14 +128,14 @@ const TracksSection = () => {
 
       // Bubble floats past the bug's back (whichever way it's facing),
       // upright, with two thought-bubble dots trailing back to the bug
+      // (bubbles are hidden on touch screens; skip the maths when they are)
       const bubble = el.querySelector<HTMLElement>("[data-bug-bubble]");
-      if (bubble) {
+      if (bubble && sizes[i].rx > 0) {
         const rad = (a.angle * Math.PI) / 180;
         const up = { x: Math.sin(rad), y: -Math.cos(rad) };
-        const back = el.offsetWidth * 0.6; // feet → top of the bug's back
+        const { bugW, rx, ry } = sizes[i];
+        const back = bugW * 0.6; // feet → top of the bug's back
         // distance from the bubble's centre to its oval edge facing the bug
-        const rx = bubble.offsetWidth / 2;
-        const ry = bubble.offsetHeight / 2;
         const edge = 1 / Math.sqrt((up.x / rx) ** 2 + (up.y / ry) ** 2 || 1);
         const at = (d: number) =>
           `translate(calc(-50% + ${up.x * d}px), calc(-50% + ${up.y * d}px))`;
@@ -125,7 +143,7 @@ const TracksSection = () => {
         // keep the bubble on screen: nudge it sideways if it would poke past
         // either edge (the thought dots stay pointing at the bug)
         const d = back + 30 + edge;
-        const anchorX = el.getBoundingClientRect().left + el.offsetWidth / 2;
+        const anchorX = laneRect.left + (a.x / VIEW) * laneRect.width;
         const centreX = anchorX + up.x * d;
         const margin = 8;
         // only while the bug itself is on screen; as it walks off an edge the
@@ -161,6 +179,7 @@ const TracksSection = () => {
       <div className="mt-6 flex w-full flex-col gap-6 landscape:static">
         {/* Vine with the bugs walking around it */}
         <motion.div
+          ref={laneRef}
           {...reveal(0.15, 40)}
           className="crawl-lane relative z-30 aspect-square portrait:-ml-5 portrait:w-[min(100vw,520px)] portrait:self-start landscape:absolute landscape:left-0 landscape:top-1/2 landscape:w-[min(46vw,76svh)] landscape:-translate-y-1/2"
         >
@@ -197,7 +216,7 @@ const TracksSection = () => {
               >
                 <span
                   data-bug-bubble
-                  className={`pointer-events-none absolute left-1/2 top-0 z-10 whitespace-nowrap rounded-[999px] border-2 border-[#f26c4f] px-2 py-0.5 text-[11px] sm:px-3 sm:py-1 sm:text-[13px] tracking-wide shadow-sm transition-[color,background-color,opacity] duration-300 md:text-[15px] ${
+                  className={`pointer-events-none absolute left-1/2 top-0 z-10 whitespace-nowrap pointer-coarse:hidden rounded-[999px] border-2 border-[#f26c4f] px-2 py-0.5 text-[11px] sm:px-3 sm:py-1 sm:text-[13px] tracking-wide shadow-sm transition-[color,background-color,opacity] duration-300 md:text-[15px] ${
                     selected
                       ? "bg-[#f26c4f] text-[#fffbe3]"
                       : "bg-[#fffbe3] text-[#f26c4f]"
@@ -209,7 +228,7 @@ const TracksSection = () => {
                   <span
                     key={k}
                     data-bubble-dot
-                    className={`pointer-events-none absolute left-1/2 top-0 z-10 rounded-full border-2 border-[#f26c4f] transition-opacity duration-300 ${
+                    className={`pointer-events-none absolute left-1/2 top-0 z-10 rounded-full pointer-coarse:hidden border-2 border-[#f26c4f] transition-opacity duration-300 ${
                       k === 0 ? "size-1.5" : "size-2.5"
                     } ${selected ? "bg-[#f26c4f]" : "bg-[#fffbe3]"}`}
                     aria-hidden

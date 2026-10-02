@@ -5,8 +5,8 @@ import { reveal } from "@/components/scroll-motion";
 
 import Image, { type StaticImageData } from "next/image";
 import { ImageIcon } from "lucide-react";
-import coderLogo from "@/images/sponsors/coder.png";
-import openmajorsLogo from "@/images/sponsors/openmajors.png";
+import coderLogo from "@/images/sponsors/coder.webp";
+import openmajorsLogo from "@/images/sponsors/openmajors.webp";
 import typesenseLogo from "@/images/sponsors/typesense.svg";
 import emoryNlpLogo from "@/images/sponsors/emorynlp.webp";
 import cloud from "@/images/cloud-bg.webp";
