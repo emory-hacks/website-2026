@@ -288,7 +288,12 @@ const LandingSection = () => {
         {/* Logo */}
         <div
           className="absolute z-10"
-          style={{ left: "16.875%", top: "35.25%", width: "66.18%" }}
+          style={{
+            left: "16.875%",
+            top: "35.25%",
+            width: "66.18%",
+            transform: "scale(1.2)",
+          }}
         >
           <motion.div style={{ y: centerY }}>
             <Logo glowBlur="3.5cqw" />
