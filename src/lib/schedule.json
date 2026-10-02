@@ -4,55 +4,106 @@
     "events": [
       {
         "time": "02:00 PM",
-        "description": "Participant Check-in"
+        "description": "Check-In Opens"
       },
-      { "time": "03:30 PM", "description": "Opening Ceremony" },
-      { "time": "05:00 PM", "description": "Hackathon Begins" },
-      { "time": "06:00 PM", "description": "Dinner" },
-      { "time": "06:00 PM", "description": "Vectus Mentors" },
       {
-        "time": "06:30 PM",
-        "description": "MLH Google AI Studio"
+        "time": "04:00 PM",
+        "description": "Opening Ceremony"
       },
-      { "time": "07:30 PM", "description": "Workshop 1" },
-      { "time": "10:00 PM", "description": "Late-night Snack" }
+      {
+        "time": "05:00 PM",
+        "description": "Team Formation"
+      },
+      {
+        "time": "06:00 PM",
+        "description": "Sponsor Workshop"
+      },
+      {
+        "time": "07:00 PM",
+        "description": "Dinner"
+      },
+      {
+        "time": "08:00 PM",
+        "description": "Hacking Begins"
+      },
+      {
+        "time": "09:00 PM",
+        "description": "Sponsor Workshop"
+      },
+      {
+        "time": "12:00 AM",
+        "description": "Quiet Hours"
+      }
     ]
   },
-
   {
     "day": "Saturday",
     "events": [
-      { "time": "12:00 AM", "description": "Quiet Hours" },
-      { "time": "07:00 AM", "description": "Breakfast" },
-      { "time": "09:15 AM", "description": "Workshop 2" },
-      { "time": "10:15 AM", "description": "Workshop 3" },
+      {
+        "time": "08:00 AM",
+        "description": "Breakfast"
+      },
+      {
+        "time": "09:30 AM",
+        "description": "Speaker Event"
+      },
       {
         "time": "11:00 AM",
-        "description": "Vectus and Akash Mentors"
+        "description": "Mini Games"
       },
-      { "time": "11:15 AM", "description": "Workshop 4" },
-      { "time": "12:00 PM", "description": "Lunch" },
-      { "time": "01:15 PM", "description": "Workshop 5" },
-      { "time": "06:00 PM", "description": "Dinner" },
       {
-        "time": "06:30 PM",
-        "description": "MLH Github Copilot Workshop"
+        "time": "12:00 PM",
+        "description": "Lunch"
       },
-      { "time": "11:00 PM", "description": "Late-night Snack" }
+      {
+        "time": "01:30 PM",
+        "description": "Speaker Event"
+      },
+      {
+        "time": "03:30 PM",
+        "description": "Speaker Event"
+      },
+      {
+        "time": "05:00 PM",
+        "description": "Mini Games"
+      },
+      {
+        "time": "06:00 PM",
+        "description": "Dinner"
+      },
+      {
+        "time": "08:00 PM",
+        "description": "Speaker Event"
+      }
     ]
   },
-
   {
     "day": "Sunday",
     "events": [
-      { "time": "08:00 AM", "description": "Breakfast" },
-      { "time": "09:00 AM", "description": "Submission Deadline" },
-      { "time": "09:00 AM", "description": "Round 1 Judging" },
-      { "time": "11:15 AM", "description": "Finalists Announced" },
-      { "time": "11:30 AM", "description": "Lunch" },
-      { "time": "12:30 AM", "description": "Finalists Demo" },
-      { "time": "01:30 PM", "description": "Judge Deliberation" },
-      { "time": "02:30 PM", "description": "Closing Ceremony" }
+      {
+        "time": "07:00 AM",
+        "description": "Breakfast"
+      },
+      {
+        "time": "08:00 AM",
+        "description": "Submission Deadline"
+      },
+      {
+        "time": "08:15 AM",
+        "description": "Judging Expo"
+      },
+      {
+        "time": "09:50 AM",
+        "description": "Finalists Announced"
+      },
+      {
+        "time": "10:15 AM",
+        "description": "Finalist Demos"
+      },
+      {
+        "time": "11:30 AM",
+        "description": "Closing Ceremony"
+      }
     ]
   }
 ]
