@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://www.emoryhacks.com/">
-    <img src="/src/images/logo_transparent.png" alt="Logo" width="300" height="300">
+    <img src="/src/images/logo.webp" alt="Logo" width="300" height="300">
   </a>
   <h3 align="center">Emory Hacks</h3>
 
